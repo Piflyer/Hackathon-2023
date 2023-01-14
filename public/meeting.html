@@ -131,7 +131,7 @@
     <script src="/easyrtc/easyrtc.js"></script>
     <script src="dist/networked-aframe.js"></script>
     <script src="/js/simple-navmesh-constraint.component.js"></script>
-    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-particle-system-component@master/dist/aframe-particle-system-component.min.js"></script>
     <script src="/js/gun.component.js"></script>
     <script src="/js/forward.component.js"></script>
     <script src="/js/remove-in-seconds.component.js"></script>
@@ -257,6 +257,7 @@
 <!--        <a-sky color="#ECECEC"></a-sky>-->
         <!-- Templates -->
         <!-- Avatar -->
+        <a-entity position="0 7 0" particle-system="preset: snow" particleCount="20000" maxAge="2"></a-entity>
         <a-assets>
             <a-entity id="mute-img" src="https://cdn-icons-png.flaticon.com/512/189/189653.png"></a-entity>
             <a-assets-item id="navmesh" src="assets/navmesh.glb"></a-assets-item>
@@ -289,6 +290,14 @@
                         material="side: front"
                         networked-video-source
                 ></a-plane>
+<!--                <a-plane-->
+<!--                        color="#FFF"-->
+<!--                        width="1"-->
+<!--                        height=".75"-->
+<!--                        position="0 1.8 .2"-->
+<!--                        material="side: front"-->
+<!--                        networked-video-source="streamName: screen"-->
+<!--                ></a-plane>-->
                 <a-plane
                         color="#FFF"
                         width="1"
