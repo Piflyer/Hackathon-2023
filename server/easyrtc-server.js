@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Serve the files from the examples folder
-app.use(express.static(path.resolve(__dirname, "..", "examples")));
+app.use(express.static(path.resolve(__dirname, "..", "public")));
 
 // Start Express http server
 const webServer = http.createServer(app);
