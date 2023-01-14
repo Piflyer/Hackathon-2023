@@ -152,7 +152,7 @@
             return urlParams;
         }
         if(!(getUrlParams().colour && getUrlParams().username && getUrlParams().room)) {
-            window.location.href = "prodindex.html";
+            window.location.href = "index.html";
         }
         window.ntExample = {
             randomColor: () => {
@@ -333,8 +333,8 @@
     <div style="width: 240px; height: 50px; justify-content: center; margin-left: auto; margin-right: auto; margin-top: 15px;">
         <button class="callactionbutton" style="background: #db2e2e" id="micaction"><i class="bi bi-mic-mute"></i></button>
         <button class="callactionbutton" style="background: #db2e2e" id="cameraaction"><i class="bi bi-camera-video-off"></i></button>
-        <button class="callactionbutton" style="background: #303030" id="sharebutton" onclick="alert('Join link: http://' + window.location.host + '/prodindex.html?room=' + getUrlParams().room)"><i class="bi bi-share-fill"></i></button>
-        <button class="callactionbutton" style="background: #db2e2e" id="leavebutton" onclick="leave(); window.location.href = 'prodindex.html';"><i class="bi bi-box-arrow-left"></i></button>
+        <button class="callactionbutton" style="background: #303030" id="sharebutton" onclick="alert('Join link: http://' + window.location.host + '/index.html?room=' + getUrlParams().room)"><i class="bi bi-share-fill"></i></button>
+        <button class="callactionbutton" style="background: #db2e2e" id="leavebutton" onclick="leave(); window.location.href = 'index.html';"><i class="bi bi-box-arrow-left"></i></button>
     </div>
 </div>
 <script>
