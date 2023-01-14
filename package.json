@@ -1,0 +1,15 @@
+{
+  "name": "Hackathon Metaverse",
+  "version": "1.0.0",
+  "description": "Aframe Metaverse for Hackathon",
+  "scripts": {
+    "start": "node ./server/easyrtc-server.js"
+  },
+  "author": [
+    "Piflyer",
+    "Sid220"
+  ],
+  "dependencies": {
+    "networked-aframe": "^0.11.0"
+  }
+}
