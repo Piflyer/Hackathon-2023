@@ -6,6 +6,7 @@ AFRAME.registerComponent('gun', {
   },
 
   init: function() {
+    console.log("gun", "init");
     var that = this;
     document.body.onkeyup = function(e){
       if(e.keyCode == that.data.triggerKeyCode){
