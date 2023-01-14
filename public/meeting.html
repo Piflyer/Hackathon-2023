@@ -308,6 +308,12 @@
                 ></a-plane>
             </a-entity>
         </template>
+            <!-- Bullet -->
+            <template id="bullet-template">
+                <a-entity>
+                    <a-sphere class="bullet" scale="0.1 0.1 0.1" color="#fff"></a-sphere>
+                </a-entity>
+            </template>
         <a-asset-item id="camp" src="assets/camp.glb"></a-asset-item>
         <!-- /Templates -->
         </a-assets>
@@ -321,9 +327,28 @@
                     spawn-in-circle="radius:3"
                     look-controls
                     simple-navmesh-constraint="navmesh:.navmesh;fall:0.5;height:1.65;"
+                    gun="bulletTemplate:#bullet-template"
                     wasd-controls="acceleration:15;">
             </a-entity>
         </a-entity>
+<!--        <a-entity>-->
+<!--            <a-plane-->
+<!--                    color="#FFF"-->
+<!--                    width="8"-->
+<!--                    height="4.5"-->
+<!--                    position="14 3 15"-->
+<!--                    material="side: back"-->
+<!--                    networked-video-source="streamName: screen"-->
+<!--        </a-entity>-->
+<!--        <a-plane-->
+<!--                color="#FFF"-->
+<!--                width="8"-->
+<!--                height="4.5"-->
+<!--                position="12 3 15"-->
+<!--                material="side: back"-->
+<!--                networked-->
+<!--                networked-video-source="streamName: screen"-->
+<!--        ></a-plane>-->
 
 <!--        <a-entity environment="preset:arches"></a-entity>-->
 <!--        <a-entity environment="preset: forest; groundColor: #445; grid: cross"></a-entity>-->
@@ -342,6 +367,7 @@
     <div style="width: 240px; height: 50px; justify-content: center; margin-left: auto; margin-right: auto; margin-top: 15px;">
         <button class="callactionbutton" style="background: #db2e2e" id="micaction"><i class="bi bi-mic-mute"></i></button>
         <button class="callactionbutton" style="background: #db2e2e" id="cameraaction"><i class="bi bi-camera-video-off"></i></button>
+<!--        <button class="callactionbutton" style="background: #db2e2e" id="screenshareaction"><i class="bi bi-projector"></i></button>-->
         <button class="callactionbutton" style="background: #303030" id="sharebutton" onclick="alert('Join link: http://' + window.location.host + '/index.html?room=' + getUrlParams().room)"><i class="bi bi-share-fill"></i></button>
         <button class="callactionbutton" style="background: #db2e2e" id="leavebutton" onclick="leave(); window.location.href = 'index.html';"><i class="bi bi-box-arrow-left"></i></button>
     </div>

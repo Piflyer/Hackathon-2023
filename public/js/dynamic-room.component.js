@@ -52,8 +52,11 @@ AFRAME.registerComponent('dynamic-room', {
 });
 let cameraEnabled = true;
 let micEnabled = true;
+let screenEnabled = false;
+
 const cameraButton = document.getElementById('cameraaction');
 const micButton = document.getElementById('micaction');
+const screenButton = document.getElementById("screenshareaction");
 let first = false;
 function onConnecth() {
     if(!first) {
@@ -78,6 +81,12 @@ function onConnecth() {
             micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute\"></i>";
             console.log("mic", micEnabled);
         };
+        // screenButton.onclick = function() {
+        //     navigator.mediaDevices.getDisplayMedia().then((stream) => {
+        //         NAF.connection.adapter.addLocalMediaStream(stream, "screen");
+        //         screenEnabled = true;
+        //     });
+        // }
     }
     else {
         console.log("client connected");
