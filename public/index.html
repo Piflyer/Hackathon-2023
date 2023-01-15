@@ -136,12 +136,26 @@
 
 
         <script>
+            function generateMeetingCode(){
+                var code = "";
+                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                for (var j = 0; j < 3; j++){
+                    for (var i = 0; i < 4; i++){
+                        code += possible.charAt(Math.floor(Math.random() * possible.length));
+                    }
+                    if (j < 2){
+                        code += "-";
+                    }
+                }
+               return code;
+            }
             function existingmeeting() {
                 document.getElementById("screen1").style.display = "none";
                 document.getElementById("existing").style.display = "block";
             }
             function newmeeting() {
-                document.getElementById('room-new').value=Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000
+                document.getElementById('room-new').value=generateMeetingCode();
+                document.getElementById("room-new").readOnly = true;
                 document.getElementById("screen1").style.display = "none";
                 document.getElementById("newmeeting").style.display = "block";
             }

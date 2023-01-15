@@ -1,6 +1,7 @@
 /**
  * Setup the Networked-Aframe scene component based on query parameters
  */
+
 AFRAME.registerComponent('dynamic-room', {
     init: function () {
         var el = this.el;
@@ -81,12 +82,12 @@ function onConnecth() {
             micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute\"></i>";
             console.log("mic", micEnabled);
         };
-        // screenButton.onclick = function() {
-        //     navigator.mediaDevices.getDisplayMedia().then((stream) => {
-        //         NAF.connection.adapter.addLocalMediaStream(stream, "screen");
-        //         screenEnabled = true;
-        //     });
-        // }
+        screenButton.onclick = function() {
+            navigator.mediaDevices.getDisplayMedia().then((stream) => {
+                NAF.connection.adapter.addLocalMediaStream(stream, "screen");
+                screenEnabled = true;
+            });
+        }
     }
     else {
         console.log("client connected");

@@ -122,6 +122,17 @@
             margin-right: 5px;
           position: relative;
       }
+      .meetingInfo{
+          postion: relative;
+          float: left;
+          display: inline-block;
+          line-height: 50px;
+          width: auto;
+          height: 50px;
+          font-size: 18px;
+          color: white;
+          margin-left: 15px;
+      }
 
     </style>
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
@@ -136,6 +147,26 @@
     <script src="/js/forward.component.js"></script>
     <script src="/js/remove-in-seconds.component.js"></script>
     <script>
+        function verifyRoomURL(params){
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            if (params && params.length == 14){
+                for (var i = 0; i < params.room.length; i++){
+                    if (i == 4 || i == 9){
+                        if (params.room.charAt(i) != '-'){
+                            console.log("Missing dashes")
+                            return false;
+                        }
+                    }
+                    else if (!possible.includes(params.room.charAt(i))){
+                        console.log("Invalid characters")
+                        return false;
+                    }
+                }
+                return true;
+            }
+            console.log("Invalid length")
+            return false;
+        }
         function getUrlParams() {
             var match;
             var pl = /\+/g;  // Regex for replacing addition symbol with a space
@@ -151,7 +182,7 @@
             }
             return urlParams;
         }
-        if(!(getUrlParams().colour && getUrlParams().username && getUrlParams().room)) {
+        if(!(getUrlParams().colour && getUrlParams().username && verifyRoomURL(getUrlParams().room))){
             window.location.href = "index.html";
         }
         window.ntExample = {
@@ -340,15 +371,15 @@
 <!--                    material="side: back"-->
 <!--                    networked-video-source="streamName: screen"-->
 <!--        </a-entity>-->
-<!--        <a-plane-->
-<!--                color="#FFF"-->
-<!--                width="8"-->
-<!--                height="4.5"-->
-<!--                position="12 3 15"-->
-<!--                material="side: back"-->
-<!--                networked-->
-<!--                networked-video-source="streamName: screen"-->
-<!--        ></a-plane>-->
+        <a-plane
+                color="#FFF"
+                width="8"
+                height="4.5"
+                position="12 3 15"
+                material="side: back"
+                networked
+                networked-video-source="streamName: screen"
+        ></a-plane>
 
 <!--        <a-entity environment="preset:arches"></a-entity>-->
 <!--        <a-entity environment="preset: forest; groundColor: #445; grid: cross"></a-entity>-->
@@ -364,9 +395,13 @@
     </a-scene>
 </div>
 <div class="useractionbox">
-    <div style="width: 240px; height: 50px; justify-content: center; margin-left: auto; margin-right: auto; margin-top: 15px;">
+    <div class="meetingInfo" id="meetinginfo">
+
+    </div>
+    <div style="width: 300px; height: 50px; justify-content: center; margin-left: auto; margin-right: auto; margin-top: 15px;">
         <button class="callactionbutton" style="background: #db2e2e" id="micaction"><i class="bi bi-mic-mute"></i></button>
         <button class="callactionbutton" style="background: #db2e2e" id="cameraaction"><i class="bi bi-camera-video-off"></i></button>
+        <button class="callactionbutton" style="background: #303030" id="chatlauncher"><i class="bi bi-chat-left-text"></i></button>
 <!--        <button class="callactionbutton" style="background: #db2e2e" id="screenshareaction"><i class="bi bi-projector"></i></button>-->
         <button class="callactionbutton" style="background: #303030" id="sharebutton" onclick="alert('Join link: http://' + window.location.host + '/index.html?room=' + getUrlParams().room)"><i class="bi bi-share-fill"></i></button>
         <button class="callactionbutton" style="background: #db2e2e" id="leavebutton" onclick="leave(); window.location.href = 'index.html';"><i class="bi bi-box-arrow-left"></i></button>
@@ -463,6 +498,7 @@
             // roomIndex++;
         }
     }
+    document.getElementById("meetinginfo").innerHTML = getUrlParams().room;
     document.getElementById('player').setAttribute('player-info', 'color', getUrlParams().colour);
     // 'user-' + Math.round(Math.random() * 10000)
     document.getElementById('player').setAttribute('player-info', 'name', getUrlParams().username);
