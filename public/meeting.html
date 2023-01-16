@@ -11,19 +11,21 @@
         padding: 0;
         font-family: sans-serif;
           background: #1c1c1c;
-          overflow: hidden;
       }
       .video-container {
           width: calc(100% - 30px);
+          /*width: calc(100% - 430px);*/
           height: calc(100% - 100px);
           margin-top: 15px;
           margin-left: 15px;
           margin-right: 15px;
+          display: inline-block;
           border-radius: 20px;
           overflow: hidden;
           z-index: 0;
           display: inline-block;
           background: #303030;
+          transtion: all 0.75s;
       }
       .controlpanel{
           float: right;
@@ -91,19 +93,6 @@
             cursor: pointer;
             display: block;
       }
-      input[type=text] {
-          display: block;
-          text-align: center;
-          margin-left: auto;
-          margin-right: auto;
-          width: 200px;
-          height: 30px;
-          padding: 2px;
-          border-radius: 10px;
-          border: 1px black;
-          outline: 1px black;
-          margin-bottom: 15px;
-      }
       .useractionbox{
           height: 70px;
           width: 100%;
@@ -133,7 +122,97 @@
           color: white;
           margin-left: 15px;
       }
-
+      .warningbox {
+          postion: relative;
+          float: right;
+          display: inline-block;
+          line-height: 50px;
+          width: auto;
+          height: 50px;
+          font-size: 18px;
+          color: white;
+          margin-left: 15px;
+      }
+      .chatbox {
+          postion: relative;
+          width: 375px;
+          display: none;
+          height: 100%;
+          padding: 5px;
+          margin-top: 15px;
+          margin-right: 15px;
+          height: calc(100% - 110px);
+          float: right;
+          border-radius: 15px;
+          background: #303030;
+          z-index: 9999;
+          color: white;
+      }
+      .messageinput{
+          postion: absolute;
+            width: calc(100% - 30px);
+            height: 30px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-top: 2.5px;
+            padding-bottom: 2.5px;
+          background: #464646;
+          color: white;
+          text-align: left;
+          display: block;
+          outline: none;
+          border: none;
+          margin-top: 5px;
+            bottom: 0px;
+      }
+      .textbox{
+          postion: relative;
+          margin-left: 10px;
+          font-size: 18px;
+          line-height: 23px;
+          overflow: scroll;
+          width: calc(100% - 20px);
+          height: calc(100% - 100px);
+      }
+      .miccaminfo {
+          position: fixed;
+          z-index: 9999;
+            width: 300px;
+          padding: 10px;
+          border-radius: 15px;
+          bottom: 100px;
+          font-size: 20px;
+          text-align: center;
+          vertical-align: center;
+            color: white;
+          height: 70px;
+          backdrop-filter: blur(3px);
+          background: rgba(70, 70, 70, 0.5);
+          left: 50%;
+          transform: translateX(-50%);
+      }
+        .chatnotif {
+            position: fixed;
+            z-index: 9999;
+            width: auto;
+            max-width: 300px;
+            padding: 10px;
+            border-radius: 15px;
+            bottom: 100px;
+            font-size: 20px;
+            text-align: center;
+            vertical-align: center;
+            color: white;
+            height: auto;
+            backdrop-filter: blur(4px);
+            background: rgba(68, 68, 68, 0.75);
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+        }
     </style>
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.5.0/socket.io.slim.js"></script>
@@ -150,14 +229,14 @@
         function verifyRoomURL(params){
             var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             if (params && params.length == 14){
-                for (var i = 0; i < params.room.length; i++){
+                for (var i = 0; i < params.length; i++){
                     if (i == 4 || i == 9){
-                        if (params.room.charAt(i) != '-'){
+                        if (params.charAt(i) != '-'){
                             console.log("Missing dashes")
                             return false;
                         }
                     }
-                    else if (!possible.includes(params.room.charAt(i))){
+                    else if (!possible.includes(params.charAt(i))){
                         console.log("Invalid characters")
                         return false;
                     }
@@ -238,17 +317,6 @@
 
             update: function () {
                 console.log("update", "avatar")
-                //if (this.head) this.head.setAttribute('material', 'color', this.data.color);
-                // if (this.head) {
-                //     obj = this.head.getObject3D("mesh");
-                //     console.log(obj)
-                //     // obj.traverse(function(node){
-                //     //     if(node.type == "Mesh"){
-                //     //         node.material.color.set(this.data.color);
-                //     //     }
-                //     // })
-                // }
-
                 if(this.head){
                     this.head.addEventListener('model-loaded', (e) => {
                         console.log('this.head exists!');
@@ -275,18 +343,14 @@
     <script src="/js/spawn-in-circle.component.js"></script>
 </head>
 <body>
+<div id="miccaminfo" class="miccaminfo">Mic and camera access will be enabled once someone joins the room.</div>
+<div class="chatnotif" id="chatnotif"></div>
 <div class="video-container">
     <a-scene embedded
              networked-scene="onConnect: onConnect;"
              dynamic-room
             gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/v1/decoders/"
              renderer="colorManagement: true">
-<!--        <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>-->
-<!--        <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>-->
-<!--        <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>-->
-<!--        <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>-->
-<!--        <a-sky color="#ECECEC"></a-sky>-->
-        <!-- Templates -->
         <!-- Avatar -->
         <a-entity position="0 7 0" particle-system="preset: snow" particleCount="20000" maxAge="2"></a-entity>
         <a-assets>
@@ -296,14 +360,6 @@
         <template id="avatar-template">
             <a-entity class="avatar" player-info networked-audio-source >
                 <a-entity gltf-model="#avatar" class="head" scale="0.75 0.75 0.75" position="0 -1 0.25">
-<!--                <a-sphere class="head" scale="0.45 0.5 0.4"></a-sphere>-->
-<!--                <a-entity class="face" position="0 0.05 0">-->
-<!--                    <a-sphere class="eye" color="#efefef" position="0.16 0.1 -0.35" scale="0.12 0.12 0.12">-->
-<!--                        <a-sphere class="pupil" color="#000" position="0 0 -1" scale="0.2 0.2 0.2"></a-sphere>-->
-<!--                    </a-sphere>-->
-<!--                    <a-sphere class="eye" color="#efefef" position="-0.16 0.1 -0.35" scale="0.12 0.12 0.12">-->
-<!--                        <a-sphere class="pupil" color="#000" position="0 0 -1" scale="0.2 0.2 0.2"></a-sphere>-->
-<!--                    </a-sphere>-->
                 </a-entity>
                 <a-text
                         class="nametag"
@@ -371,19 +427,19 @@
 <!--                    material="side: back"-->
 <!--                    networked-video-source="streamName: screen"-->
 <!--        </a-entity>-->
-        <a-plane
-                color="#FFF"
-                width="8"
-                height="4.5"
-                position="12 3 15"
-                material="side: back"
-                networked
-                networked-video-source="streamName: screen"
-        ></a-plane>
+<!--        <a-plane-->
+<!--                color="#FFF"-->
+<!--                width="8"-->
+<!--                height="4.5"-->
+<!--                position="12 3 15"-->
+<!--                material="side: back"-->
+<!--                networked-->
+<!--                networked-video-source="streamName: screen"-->
+<!--        ></a-plane>-->
 
 <!--        <a-entity environment="preset:arches"></a-entity>-->
 <!--        <a-entity environment="preset: forest; groundColor: #445; grid: cross"></a-entity>-->
-        <a-gltf-model src="#navmesh" class="navmesh" position="0 0 0" scale="1 1 1" navmesh="debug: true" visible="false"></a-gltf-model>
+        <a-gltf-model src="#navmesh" class="navmesh" position="0 0 0" scale="1 1 1" navmesh="false: true" visible="false"></a-gltf-model>
         <a-entity gltf-model="#camp" position="0 0 0" scale="1 1 1" shadow="cast: true"></a-entity>
         <a-sky color="#8cd7de"></a-sky>
         <a-entity light="type:ambient;intensity:0.75"></a-entity>
@@ -394,20 +450,66 @@
                   position='-5 3 1.5'"></a-entity>
     </a-scene>
 </div>
+<div class="chatbox">
+    <h2 style="margin-left: 10px; display: inline-block; margin-bottom: 5px;">Messages:</h2>
+    <div class="textbox" id="textbox"></div>
+    <input class="messageinput" type="text" id="message" placeholder="Enter message" style="margin-left: 10px; display: inline-block">
+</div>
 <div class="useractionbox">
     <div class="meetingInfo" id="meetinginfo">
-
     </div>
     <div style="width: 300px; height: 50px; justify-content: center; margin-left: auto; margin-right: auto; margin-top: 15px;">
-        <button class="callactionbutton" style="background: #db2e2e" id="micaction"><i class="bi bi-mic-mute"></i></button>
-        <button class="callactionbutton" style="background: #db2e2e" id="cameraaction"><i class="bi bi-camera-video-off"></i></button>
-        <button class="callactionbutton" style="background: #303030" id="chatlauncher"><i class="bi bi-chat-left-text"></i></button>
+<!--        <button class="callactionbutton" style="background: #db2e2e" id="micaction"><i class="bi bi-mic-mute"></i></button>-->
+<!--        <button class="callactionbutton" style="background: #db2e2e" id="cameraaction"><i class="bi bi-camera-video-off"></i></button>-->
+        <button class="callactionbutton" style="background: #868686" id="micaction"><i class="bi bi-exclamation-triangle"></i></button>
+        <button class="callactionbutton" style="background: #868686" id="cameraaction"><i class="bi bi-exclamation-triangle"></i></button>
+        <button class="callactionbutton" style="background: #303030" id="chatlauncher" onclick="toggleChat()"><i class="bi bi-chat-left-text"></i></button>
 <!--        <button class="callactionbutton" style="background: #db2e2e" id="screenshareaction"><i class="bi bi-projector"></i></button>-->
         <button class="callactionbutton" style="background: #303030" id="sharebutton" onclick="alert('Join link: http://' + window.location.host + '/index.html?room=' + getUrlParams().room)"><i class="bi bi-share-fill"></i></button>
         <button class="callactionbutton" style="background: #db2e2e" id="leavebutton" onclick="leave(); window.location.href = 'index.html';"><i class="bi bi-box-arrow-left"></i></button>
     </div>
 </div>
 <script>
+    let unread = false;
+    const chatbox = document.getElementsByClassName("chatbox");
+    function markasunread() {
+        unread = false;
+        document.getElementById("chatlauncher").innerHTML = "<i class=\"bi bi-chat-left-text\"></i>";
+        document.getElementById("chatnotif").style.display = "none";
+        document.getElementById("chatnotif").innerHTML = "";
+    }
+
+    function toggleChat() {
+        markasunread();
+        if(chatbox[0].style.display === "none" || chatbox[0].style.display === "") {
+            document.getElementsByClassName("chatbox")[0].style.display = "block";
+            document.getElementsByClassName("video-container")[0].style.setProperty('width', 'calc(100% - 430px)');
+        } else {
+            document.getElementsByClassName("chatbox")[0].style.display = "none";
+            document.getElementsByClassName("video-container")[0].style.setProperty('width', 'calc(100% - 30px)');
+        }
+    }
+    easyrtc.setOnError(function(errorObject){
+        console.log("easyrtc error: " + errorObject.errorText);
+    });
+    function chatNotif(user, message){
+        console.log("chatNotif");
+    if(chatbox[0].style.display === "none" || chatbox[0].style.display === "") {
+        console.log("Message: " + message);
+        document.getElementById("chatnotif").innerHTML = user + ": " + message;
+        document.getElementById("chatnotif").style.display = "block";
+        unread = true;
+        setTimeout(function() {
+            document.getElementById("chatnotif").style.display = "none";
+            document.getElementById("chatnotif").innerHTML = "";
+            }, 5000);
+        }
+    else {
+        console.log("No Notification");
+        unread = false;
+
+    }
+    }
     // see issue https://github.com/networked-aframe/networked-aframe/issues/267
     NAF.schemas.getComponentsOriginal = NAF.schemas.getComponents;
     NAF.schemas.getComponents = (template) => {
@@ -424,70 +526,26 @@
         const components = NAF.schemas.getComponentsOriginal(template);
         return components;
     };
-</script>
+        NAF.schemas.add({
+            template: '#avatar-template',
+            components: [
+                'position',
+                'rotation',
+                {
+                    selector: '.head',
+                    component: 'material',
+                    property: 'color'
+                },
+                {
+                    selector: '.nametag',
+                    component: 'value'
+                },
+                'player-info'
+            ]
+        });
 
-<script>
-    NAF.schemas.add({
-        template: '#avatar-template',
-        components: [
-            'position',
-            'rotation',
-            {
-                selector: '.head',
-                component: 'material',
-                property: 'color'
-            },
-            {
-                selector: '.nametag',
-                component: 'value'
-            },
-            'player-info'
-        ]
-    });
+    //CHAT
 
-    </script>
-    <script>
-    // Define custom schema for syncing avatar color, set by random-color
-
-
-    // Called by Networked-Aframe when connected to server
-
-    //UI Changes
-    // function onboard() {
-    //     document.getElementsByClassName("startup")[0].style.display = "none";
-    //     document.getElementById("room").value;
-    // }
-    // let cameraEnabled = true;
-    // let micEnabled = true;
-    // const cameraButton = document.getElementById('cameraaction');
-    // const micButton = document.getElementById('micaction');
-    //
-    // function onConnect() {
-    //     NAF.connection.adapter.enableCamera(!cameraEnabled);
-    //     cameraEnabled = !cameraEnabled;
-    //     NAF.connection.adapter.enableMicrophone(!micEnabled);
-    //     micEnabled = !micEnabled;
-    //     console.log('onConnect', new Date());
-    //     cameraButton.addEventListener('click', function () {
-    //         NAF.connection.adapter.enableCamera(!cameraEnabled);
-    //         cameraEnabled = !cameraEnabled;
-    //         cameraButton.style.background = cameraEnabled ? '#303030': '#db2e2e';
-    //         cameraButton.innerHTML = cameraEnabled ? "<i class=\"bi bi-camera-video-fill\"></i>" : "<i class=\"bi bi-camera-video-off\"></i>";
-    //         console.log("video", cameraEnabled);
-    //     });
-    //     micButton.addEventListener('click', function () {
-    //         NAF.connection.adapter.enableMicrophone(!micEnabled);
-    //         micEnabled = !micEnabled;
-    //         micButton.style.background = micEnabled ? '#303030':'#db2e2e' ;
-    //         micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute\"></i>";
-    //         if(micEnabled) {
-    //             document.getElementById("user-muted").setAttribute("visible",false);
-    //         }
-    //         console.log("mic", micEnabled);
-    //     });
-    // }
-</script>
-<script>
     function leave() {
         var scene = document.querySelector('a-scene');
         if (scene.hasAttribute('networked-scene')) {
@@ -498,6 +556,31 @@
             // roomIndex++;
         }
     }
+    const textbox = document.querySelector('#textbox');
+    const messageinput = document.querySelector("#message");
+    const chatuser = getUrlParams().username;
+    NAF.connection.subscribeToDataChannel("chat", (senderId, dataType, data, targetId) => {console.log("msg", data, "from", senderId)
+        console.log("msg", data, "from", senderId)
+        textbox.innerHTML += data.user + ": " + data.txt + '<br>'
+        textbox.scrollTop = textbox.scrollHeight;
+        chatNotif(data.user, data.txt);
+        if (unread == true) {
+            document.getElementById("chatlauncher").innerHTML = "<i class='bi bi-chat-left-text-fill' style='color: #1a6bed'></i>";
+        }
+        if (unread == false) {
+            markasunread();
+        }
+    });
+    messageinput.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13 && messageinput.value != "") {
+            event.preventDefault();
+            textbox.innerHTML += "You: " + messageinput.value + '<br>'
+            textbox.innerHTML += ""
+            NAF.connection.broadcastDataGuaranteed("chat", {user: chatuser, txt: messageinput.value});
+            messageinput.value = "";
+            textbox.scrollTop = textbox.scrollHeight;
+        }
+    });
     document.getElementById("meetinginfo").innerHTML = getUrlParams().room;
     document.getElementById('player').setAttribute('player-info', 'color', getUrlParams().colour);
     // 'user-' + Math.round(Math.random() * 10000)

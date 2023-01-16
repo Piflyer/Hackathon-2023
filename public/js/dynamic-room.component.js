@@ -10,7 +10,11 @@ AFRAME.registerComponent('dynamic-room', {
         if (!params.room) {
             window.alert('Please add a room name in the URL, eg. ?room=myroom');
         }
-        console.log("room", params.room);
+        if (!verifyRoomURL(params.room)) {
+            window.location.href = '/index.html';
+        }
+        console.log("Room: " + params.room);
+
         // "
         // debug: true;
         // adapter: easyrtc;
@@ -58,38 +62,54 @@ let screenEnabled = false;
 const cameraButton = document.getElementById('cameraaction');
 const micButton = document.getElementById('micaction');
 const screenButton = document.getElementById("screenshareaction");
-let first = false;
+let first = true;
 function onConnecth() {
     if(!first) {
-        console.log('onConnect');
-        document.getElementById('player').setAttribute('player-info', 'name', getUrlParams().username);
-        NAF.connection.adapter.enableCamera(!cameraEnabled);
-        cameraEnabled = !cameraEnabled;
-        NAF.connection.adapter.enableMicrophone(!micEnabled);
-        micEnabled = !micEnabled;
-        console.log('onConnect', new Date());
-        cameraButton.onclick = function () {
-            NAF.connection.adapter.enableCamera(!cameraEnabled);
-            cameraEnabled = !cameraEnabled;
-            cameraButton.style.background = cameraEnabled ? '#303030' : '#db2e2e';
-            cameraButton.innerHTML = cameraEnabled ? "<i class=\"bi bi-camera-video-fill\"></i>" : "<i class=\"bi bi-camera-video-off\"></i>";
-            console.log("video", cameraEnabled);
-        };
-        micButton.onclick = function () {
-            NAF.connection.adapter.enableMicrophone(!micEnabled);
-            micEnabled = !micEnabled;
-            micButton.style.background = micEnabled ? '#303030' : '#db2e2e';
-            micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute\"></i>";
-            console.log("mic", micEnabled);
-        };
-        screenButton.onclick = function() {
-            navigator.mediaDevices.getDisplayMedia().then((stream) => {
-                NAF.connection.adapter.addLocalMediaStream(stream, "screen");
-                screenEnabled = true;
-            });
-        }
+    console.log("something went horribly wrong");
     }
     else {
-        console.log("client connected");
+        NAF.connection.adapter.enableCamera(!cameraEnabled);
+        NAF.connection.adapter.enableMicrophone(!micEnabled);
+        console.log("First Load");
+        cameraEnabled = !cameraEnabled;
+        micEnabled = !micEnabled;
+        cameraButton.style.background = cameraEnabled ? '#303030' : '#db2e2e';
+        cameraButton.innerHTML = cameraEnabled ? "<i class=\"bi bi-camera-video-fill\"></i>" : "<i class=\"bi bi-camera-video-off\"></i>";
+        micButton.style.background = micEnabled ? '#303030' : '#db2e2e';
+        micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute-fill\"></i>";
+        document.getElementById("miccaminfo").style.display = "none";
+        first = false;
+        console.log(first);
+        finishLoad();
     }
+}
+
+function disableVideo(){
+
+    const stream = NAF.connection.adapter.getMediaStream();
+    stream.getTracks().forEach(track => {
+        if (track.kind === 'video') {
+            track.stop();
+        }
+    })
+
+}
+function finishLoad(){
+    console.log('onConnect');
+    document.getElementById('player').setAttribute('player-info', 'name', getUrlParams().username);
+    console.log('onConnect', new Date());
+    cameraButton.onclick = function () {
+        NAF.connection.adapter.enableCamera(!cameraEnabled);
+        cameraEnabled = !cameraEnabled;
+        cameraButton.style.background = cameraEnabled ? '#303030' : '#db2e2e';
+        cameraButton.innerHTML = cameraEnabled ? "<i class=\"bi bi-camera-video-fill\"></i>" : "<i class=\"bi bi-camera-video-off\"></i>";
+        console.log("video", cameraEnabled);
+    };
+    micButton.onclick = function () {
+        NAF.connection.adapter.enableMicrophone(!micEnabled);
+        micEnabled = !micEnabled;
+        micButton.style.background = micEnabled ? '#303030' : '#db2e2e';
+        micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute\"></i>";
+        console.log("mic", micEnabled);
+    };
 }
