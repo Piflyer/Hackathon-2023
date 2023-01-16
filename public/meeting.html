@@ -471,6 +471,7 @@
 </div>
 <script>
     let unread = false;
+    let ascene = document.querySelector('a-scene');
     const chatbox = document.getElementsByClassName("chatbox");
     function markasunread() {
         unread = false;
@@ -488,6 +489,7 @@
             document.getElementsByClassName("chatbox")[0].style.display = "none";
             document.getElementsByClassName("video-container")[0].style.setProperty('width', 'calc(100% - 30px)');
         }
+        ascene.resize();
     }
     easyrtc.setOnError(function(errorObject){
         console.log("easyrtc error: " + errorObject.errorText);

@@ -4,8 +4,8 @@
 
 AFRAME.registerComponent('dynamic-room', {
     init: function () {
-        var el = this.el;
-        var params = this.getUrlParams();
+        const el = this.el;
+        const params = this.getUrlParams();
 
         if (!params.room) {
             window.alert('Please add a room name in the URL, eg. ?room=myroom');
@@ -14,15 +14,7 @@ AFRAME.registerComponent('dynamic-room', {
             window.location.href = '/index.html';
         }
         console.log("Room: " + params.room);
-
-        // "
-        // debug: true;
-        // adapter: easyrtc;
-        // audio: true;
-        // onConnect: onConnect;
-        // video: true;
-        // "
-        var networkedComp = {
+        const networkedComp = {
             room: params.room,
             debug: true,
             audio: true,
@@ -37,6 +29,7 @@ AFRAME.registerComponent('dynamic-room', {
             onConnecth();
         });
         this.el.emit("connect", null, false);
+
     },
 
     getUrlParams: function () {
@@ -68,6 +61,7 @@ function onConnecth() {
     console.log("something went horribly wrong");
     }
     else {
+        document.getElementById('player').setAttribute('player-info', 'name', getUrlParams().username);
         NAF.connection.adapter.enableCamera(!cameraEnabled);
         NAF.connection.adapter.enableMicrophone(!micEnabled);
         console.log("First Load");
@@ -96,7 +90,6 @@ function disableVideo(){
 }
 function finishLoad(){
     console.log('onConnect');
-    document.getElementById('player').setAttribute('player-info', 'name', getUrlParams().username);
     console.log('onConnect', new Date());
     cameraButton.onclick = function () {
         NAF.connection.adapter.enableCamera(!cameraEnabled);
