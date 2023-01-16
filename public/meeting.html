@@ -465,7 +465,7 @@
         <button class="callactionbutton" style="background: #868686" id="cameraaction"><i class="bi bi-exclamation-triangle"></i></button>
         <button class="callactionbutton" style="background: #303030" id="chatlauncher" onclick="toggleChat()"><i class="bi bi-chat-left-text"></i></button>
 <!--        <button class="callactionbutton" style="background: #db2e2e" id="screenshareaction"><i class="bi bi-projector"></i></button>-->
-        <button class="callactionbutton" style="background: #303030" id="sharebutton" onclick="alert('Join link: http://' + window.location.host + '/index.html?room=' + getUrlParams().room)"><i class="bi bi-share-fill"></i></button>
+        <button class="callactionbutton" style="background: #303030" id="sharebutton" onclick="shareMeetingInfo()"><i class="bi bi-share-fill"></i></button>
         <button class="callactionbutton" style="background: #db2e2e" id="leavebutton" onclick="leave(); window.location.href = 'index.html';"><i class="bi bi-box-arrow-left"></i></button>
     </div>
 </div>
@@ -492,6 +492,14 @@
     easyrtc.setOnError(function(errorObject){
         console.log("easyrtc error: " + errorObject.errorText);
     });
+    function shareMeetingInfo() {
+        document.getElementById("chatnotif").innerHTML = "Share this meeting link with your friends: http://" + window.location.host + "/index.html?room=" + getUrlParams().room;
+        document.getElementById("chatnotif").style.display = "block";
+        setTimeout(function() {
+            document.getElementById("chatnotif").style.display = "none";
+            document.getElementById("chatnotif").innerHTML = "";
+        }, 5000);
+    }
     function chatNotif(user, message){
         console.log("chatNotif");
     if(chatbox[0].style.display === "none" || chatbox[0].style.display === "") {
