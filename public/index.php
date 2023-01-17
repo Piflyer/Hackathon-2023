@@ -1,3 +1,35 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+session_start();
+
+if (!(isset($_SESSION['id']) && isset($_SESSION['user_name']))) {
+    header("Location: login.php?error=Please login to continue&continue=" . urlencode($_SERVER['REQUEST_URI']));
+    exit();
+}
+$error = false;
+if(isset($_GET['room'])) {
+    $room = $_GET['room'];
+    if(!preg_match("/^[0-9]{5}$/", $room)) {
+        $error = "Invalid room ID";
+    }
+    require "internals/db_conn.php";
+    $sql = "SELECT * FROM rooms WHERE id='$room'";
+    $result = mysqli_query($conn, $sql);
+    if($result) {
+        if(mysqli_num_rows($result) === 0) {
+            $error = "Invalid room ID";
+        }
+    }
+    else {
+        $error = "Internal error";
+    }
+}
+if(isset($_GET['error'])) {
+    $error = htmlspecialchars($_GET['error']);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,24 +144,27 @@
         </button>
         </div>
         <div id="existing">
-            <form method="get" action="meeting.html">
+            <form method="post" action="meeting.php">
                 <p id="existing-code">Enter an existing meeting room join code:</p>
                 <input required name="room" type="text" id="room" placeholder="Meeting Room">
+                <p>Enter password:</p>
+                <input required name="password" type="text" id="password" placeholder="Password">
                 <p>Enter your name:</p>
-                <input required name="username" type="text" id="username-overlay" placeholder="Your Name"/>
+                <input required name="username" type="text" id="username-overlay" value="<?= $_SESSION['name']; ?>" placeholder="Your Name"/>
                 <p>Choose a color for your avatar.</p>
                 <input required type="color" name="colour" id="colour">
                 <button class="continuebutton" type="submit" class="continuebutton">Join Meeting</button>
             </form>
         </div >
         <div id="newmeeting">
-            <form method="get" action="meeting.html">
+            <form method="post" action="meeting.php">
                 <p>Your meeting room code:</p>
                 <input required name="room" type="text" id="room-new" placeholder="Meeting Room">
                 <p>Enter your name:</p>
-                <input required name="username" type="text" id="username-overlay-new" placeholder="Your Name"/>
+                <input required name="username" type="text" id="username-overlay-new" value="<?= $_SESSION['name']; ?>" placeholder="Your Name"/>
                 <p>Choose a color for your avatar.</p>
                 <input required type="color" name="colour" id="colour-new">
+                <input type="hidden" name="password" id="hidden-password">
                 <button class="continuebutton" type="submit" class="continuebutton">Start Meeting</button>
             </form>
         </div>
@@ -154,10 +189,19 @@
                 document.getElementById("existing").style.display = "block";
             }
             function newmeeting() {
-                document.getElementById('room-new').value=generateMeetingCode();
-                document.getElementById("room-new").readOnly = true;
-                document.getElementById("screen1").style.display = "none";
-                document.getElementById("newmeeting").style.display = "block";
+                fetch("internals/create_room.php")
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if(data.error) {
+                            alert("Error creating room: " + data.error);
+                            return;
+                        }
+                        document.getElementById('room-new').value=data.id;
+                        document.getElementById("room-new").readOnly = true;
+                        document.getElementById("screen1").style.display = "none";
+                        document.getElementById("newmeeting").style.display = "block";
+                        document.getElementById("hidden-password").value = data.pass;
+                    });
             }
 
             function getUrlParams() {
@@ -175,11 +219,18 @@
                 }
                 return urlParams;
             }
-            if(typeof getUrlParams().room !== "undefined") {
-                existingmeeting();
+            <?php
+            if (!$error) {
+                if(isset($_GET['room'])) {
+                        echo 'existingmeeting();
                 document.getElementById("room").style.display = "none";
-                document.getElementById("existing-code").style.display = "none";
+                document.getElementById("existing-code").style.display = "none";';
+                    }
+                }
+            else {
+                echo "alert('Error: $error');";
             }
+            ?>
             document.getElementById("colour").value = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
             document.getElementById("colour-new").value = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
 

@@ -1,21 +1,15 @@
+<?php
+header("Content-Type: application/javascript; charset=UTF-8");
+?>
 /**
  * Setup the Networked-Aframe scene component based on query parameters
  */
 
 AFRAME.registerComponent('dynamic-room', {
     init: function () {
-        const el = this.el;
-        const params = this.getUrlParams();
-
-        if (!params.room) {
-            window.alert('Please add a room name in the URL, eg. ?room=myroom');
-        }
-        if (!verifyRoomURL(params.room)) {
-            window.location.href = '/index.html';
-        }
-        console.log("Room: " + params.room);
+        console.log("Room: " + <?= $_GET['room']; ?>);
         const networkedComp = {
-            room: params.room,
+            room: <?= $_GET['room']; ?>,
             debug: true,
             audio: true,
             onConnect: onConnecth,
@@ -31,22 +25,6 @@ AFRAME.registerComponent('dynamic-room', {
         this.el.emit("connect", null, false);
 
     },
-
-    getUrlParams: function () {
-        var match;
-        var pl = /\+/g;  // Regex for replacing addition symbol with a space
-        var search = /([^&=]+)=?([^&]*)/g;
-        var decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')); };
-        var query = window.location.search.substring(1);
-        var urlParams = {};
-
-        match = search.exec(query);
-        while (match) {
-            urlParams[decode(match[1])] = decode(match[2]);
-            match = search.exec(query);
-        }
-        return urlParams;
-    }
 });
 let cameraEnabled = true;
 let micEnabled = true;

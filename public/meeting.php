@@ -1,3 +1,38 @@
+<?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+require "internals/db_conn.php";
+
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = htmlspecialchars(mysqli_escape_string($conn, $value), ENT_QUOTES);
+}
+if(!(isset($_POST['room']) && isset($_POST['username']) && isset($_POST['colour']) && isset($_POST['password']))) {
+    header("Location: index.php?error=Invalid request");
+}
+if(!preg_match("/^[0-9]{5}$/", $_POST['room'])) {
+    header("Location: index.php?error=Invalid room ID");
+}
+if(!preg_match("/^#[a-fA-F0-9]{6}$/", $_POST['colour'])) {
+    header("Location: index.php?error=Invalid colour");
+}
+$sql = "SELECT * FROM rooms WHERE id='" . $_POST['room'] . "'";
+$result = mysqli_query($conn, $sql);
+if($result) {
+    if(mysqli_num_rows($result) === 0) {
+        header("Location: index.php?error=Room not found");
+    }
+    else {
+        $row = mysqli_fetch_assoc($result);
+        if($row['password'] !== $_POST['password']) {
+            header("Location: index.php?error=Incorrect password");
+        }
+    }
+} else {
+    exit("Internal error");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -218,52 +253,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.5.0/socket.io.slim.js"></script>
     <script src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
     <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
-    <script src="/easyrtc/easyrtc.js"></script>
+    <script src="https://winterwonderland.azurewebsites.net/easyrtc/easyrtc.js"></script>
     <script src="dist/networked-aframe.js"></script>
-    <script src="/js/simple-navmesh-constraint.component.js"></script>
+    <script src="js/simple-navmesh-constraint.component.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-particle-system-component@master/dist/aframe-particle-system-component.min.js"></script>
-    <script src="/js/gun.component.js"></script>
-    <script src="/js/forward.component.js"></script>
-    <script src="/js/remove-in-seconds.component.js"></script>
+    <script src="js/gun.component.js"></script>
+    <script src="js/forward.component.js"></script>
+    <script src="js/remove-in-seconds.component.js"></script>
     <script>
-        function verifyRoomURL(params){
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            if (params && params.length == 14){
-                for (var i = 0; i < params.length; i++){
-                    if (i == 4 || i == 9){
-                        if (params.charAt(i) != '-'){
-                            console.log("Missing dashes")
-                            return false;
-                        }
-                    }
-                    else if (!possible.includes(params.charAt(i))){
-                        console.log("Invalid characters")
-                        return false;
-                    }
-                }
-                return true;
-            }
-            console.log("Invalid length")
-            return false;
-        }
-        function getUrlParams() {
-            var match;
-            var pl = /\+/g;  // Regex for replacing addition symbol with a space
-            var search = /([^&=]+)=?([^&]*)/g;
-            var decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')); };
-            var query = window.location.search.substring(1);
-            var urlParams = {};
-
-            match = search.exec(query);
-            while (match) {
-                urlParams[decode(match[1])] = decode(match[2]);
-                match = search.exec(query);
-            }
-            return urlParams;
-        }
-        if(!(getUrlParams().colour && getUrlParams().username && verifyRoomURL(getUrlParams().room))){
-            window.location.href = "index.html";
-        }
+        //function getUrlParams() {
+        //    // var match;
+        //    // var pl = /\+/g;  // Regex for replacing addition symbol with a space
+        //    // var search = /([^&=]+)=?([^&]*)/g;
+        //    // var decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')); };
+        //    // var query = window.location.search.substring(1);
+        //    // var urlParams = {};
+        //    //
+        //    // match = search.exec(query);
+        //    // while (match) {
+        //    //     urlParams[decode(match[1])] = decode(match[2]);
+        //    //     match = search.exec(query);
+        //    // }
+        //    // return urlParams;
+        //    return JSON.parse('<?php //= json_encode($_POST); ?>//');
+        //}
+        //if(!(getUrlParams().colour && getUrlParams().username && verifyRoomURL(getUrlParams().room))){
+        //    window.location.href = "./index.php";
+        //}
         window.ntExample = {
             randomColor: () => {
                 return '#' + new THREE.Color(Math.random(), Math.random(), Math.random()).getHexString();
@@ -299,7 +315,7 @@
 
                 this.ownedByLocalUser = this.el.id === 'player';
                 if (this.ownedByLocalUser) {
-                    this.data.name = getUrlParams().username;
+                    this.data.name = "<?= $_POST['username']; ?>";
                 }
             },
 
@@ -340,7 +356,7 @@
             }
         });
     </script>
-    <script src="/js/spawn-in-circle.component.js"></script>
+    <script src="js/spawn-in-circle.component.js"></script>
 </head>
 <body>
 <div id="miccaminfo" class="miccaminfo">Mic and camera access will be enabled once someone joins the room.</div>
@@ -466,7 +482,7 @@
         <button class="callactionbutton" style="background: #303030" id="chatlauncher" onclick="toggleChat()"><i class="bi bi-chat-left-text"></i></button>
 <!--        <button class="callactionbutton" style="background: #db2e2e" id="screenshareaction"><i class="bi bi-projector"></i></button>-->
         <button class="callactionbutton" style="background: #303030" id="sharebutton" onclick="shareMeetingInfo()"><i class="bi bi-share-fill"></i></button>
-        <button class="callactionbutton" style="background: #db2e2e" id="leavebutton" onclick="leave(); window.location.href = 'index.html';"><i class="bi bi-box-arrow-left"></i></button>
+        <button class="callactionbutton" style="background: #db2e2e" id="leavebutton" onclick="leave(); window.location.href = 'index.php';"><i class="bi bi-box-arrow-left"></i></button>
     </div>
 </div>
 <script>
@@ -495,7 +511,7 @@
         console.log("easyrtc error: " + errorObject.errorText);
     });
     function shareMeetingInfo() {
-        document.getElementById("chatnotif").innerHTML = "Share this meeting link with your friends: http://" + window.location.host + "/index.html?room=" + getUrlParams().room;
+        document.getElementById("chatnotif").innerHTML = "Share this meeting link with your friends: <a href='http://" + window.location.host + "/index.php?room=<?= $_POST['room']; ?>'>http://" + window.location.host + "/index.php?room=<?= $_POST['room']; ?></a>";
         document.getElementById("chatnotif").style.display = "block";
         setTimeout(function() {
             document.getElementById("chatnotif").style.display = "none";
@@ -568,7 +584,7 @@
     }
     const textbox = document.querySelector('#textbox');
     const messageinput = document.querySelector("#message");
-    const chatuser = getUrlParams().username;
+    const chatuser = "<?= $_POST['username']; ?>";
     NAF.connection.subscribeToDataChannel("chat", (senderId, dataType, data, targetId) => {console.log("msg", data, "from", senderId)
         console.log("msg", data, "from", senderId)
         textbox.innerHTML += data.user + ": " + data.txt + '<br>'
@@ -591,11 +607,11 @@
             textbox.scrollTop = textbox.scrollHeight;
         }
     });
-    document.getElementById("meetinginfo").innerHTML = getUrlParams().room;
-    document.getElementById('player').setAttribute('player-info', 'color', getUrlParams().colour);
+    document.getElementById("meetinginfo").innerHTML = "<?= $_POST['room']; ?>";
+    document.getElementById('player').setAttribute('player-info', 'color', "<?= $_POST['colour']; ?>");
     // 'user-' + Math.round(Math.random() * 10000)
-    document.getElementById('player').setAttribute('player-info', 'name', getUrlParams().username);
+    document.getElementById('player').setAttribute('player-info', 'name', "<?= $_POST['username']; ?>");
 </script>
-<script src="/js/dynamic-room.component.js"></script>
+<script src="js/dynamic-room.component.js.php?room=<?= $_POST['room'] ?>"></script>
 </body>
 </html>
