@@ -8,6 +8,7 @@ header("Content-Type: application/javascript; charset=UTF-8");
 AFRAME.registerComponent('dynamic-room', {
     init: function () {
         console.log("Room: " + <?= $_GET['room']; ?>);
+        easyrtc.joinRoom(<?= $_GET['room']; ?>);
         const networkedComp = {
             room: <?= $_GET['room']; ?>,
             debug: true,
