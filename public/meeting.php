@@ -364,7 +364,7 @@ if($result) {
 <div class="video-container">
     <a-scene embedded
              networked-scene="onConnect: onConnect;
-serverURL: https://winterwonderland.azurewebsites.net;"
+serverURL: https://wwback.vestal.tk;"
              dynamic-room
             gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/v1/decoders/"
              renderer="colorManagement: true">
