@@ -251,6 +251,9 @@ if($result) {
     </style>
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.5.0/socket.io.slim.js"></script>
+    <script>
+        const io = io("https://winterwonderland.azurewebsites.net");
+    </script>
     <script src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
     <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
     <script src="https://winterwonderland.azurewebsites.net/easyrtc/easyrtc.js"></script>
