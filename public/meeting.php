@@ -250,7 +250,7 @@ if($result) {
         }
     </style>
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.5.0/socket.io.slim.js"></script>
+    <script src="js/socket.io.slim.js"></script>
     <script>
         const io = io("https://winterwonderland.azurewebsites.net");
     </script>
