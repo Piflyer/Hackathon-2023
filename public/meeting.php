@@ -11,9 +11,9 @@ foreach ($_POST as $key => $value) {
 if(!(isset($_POST['room']) && isset($_POST['username']) && isset($_POST['colour']) && isset($_POST['password']))) {
     header("Location: index.php?error=Invalid request");
 }
-//if(!preg_match("/^[0-9]{5}$/", $_POST['room'])) {
-//    header("Location: index.php?error=Invalid room ID");
-//}
+if(!preg_match("/^[0-9]{5}$/", $_POST['room'])) {
+    header("Location: index.php?error=Invalid room ID");
+}
 if(!preg_match("/^#[a-fA-F0-9]{6}$/", $_POST['colour'])) {
     header("Location: index.php?error=Invalid colour");
 }
@@ -21,7 +21,7 @@ $sql = "SELECT * FROM rooms WHERE id='" . $_POST['room'] . "'";
 $result = mysqli_query($conn, $sql);
 if($result) {
     if(mysqli_num_rows($result) === 0) {
-//        header("Location: index.php?error=Room not found");
+        header("Location: index.php?error=Room not found");
     }
     else {
         $row = mysqli_fetch_assoc($result);
