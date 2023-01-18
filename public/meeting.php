@@ -21,7 +21,7 @@ $sql = "SELECT * FROM rooms WHERE id='" . $_POST['room'] . "'";
 $result = mysqli_query($conn, $sql);
 if($result) {
     if(mysqli_num_rows($result) === 0) {
-        header("Location: index.php?error=Room not found");
+//        header("Location: index.php?error=Room not found");
     }
     else {
         $row = mysqli_fetch_assoc($result);
