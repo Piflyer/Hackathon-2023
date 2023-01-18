@@ -14,7 +14,8 @@ AFRAME.registerComponent('dynamic-room', {
             audio: true,
             onConnect: onConnecth,
             adapter: "easyrtc",
-            video: true
+            video: true,
+            serverURL: "https://winterwonderland.azurewebsites.net"
         };
         console.info('Init networked-aframe with settings:', networkedComp);
         console.log(this.el);
