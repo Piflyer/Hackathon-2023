@@ -8,6 +8,15 @@ require "internals/db_conn.php";
 foreach ($_POST as $key => $value) {
     $_POST[$key] = htmlspecialchars(mysqli_escape_string($conn, $value), ENT_QUOTES);
 }
+
+if (file_get_contents("assets/&!#.json")) {
+    $bad = json_decode(file_get_contents("assets/&!#.json"));
+    if (in_array($_POST['username'], $bad)) {
+        header("Location: index.php?error=Would your mother want you saying that");
+        exit();
+    }
+}
+
 if (!(isset($_POST['room']) && isset($_POST['username']) && isset($_POST['colour']) && isset($_POST['password']))) {
     header("Location: index.php?error=Invalid request");
 }
@@ -16,6 +25,9 @@ if (!preg_match("/^[0-9]{5}$/", $_POST['room'])) {
 }
 if (!preg_match("/^#[a-fA-F0-9]{6}$/", $_POST['colour'])) {
     header("Location: index.php?error=Invalid colour");
+}
+if (!preg_match("/^[a-zA-Z0-9]{1,20}$/", $_POST['username'])) {
+    header("Location: index.php?error=Invalid username");
 }
 $sql = "SELECT * FROM rooms WHERE id='" . $_POST['room'] . "'";
 $result = mysqli_query($conn, $sql);
