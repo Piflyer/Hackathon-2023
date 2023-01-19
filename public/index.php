@@ -28,6 +28,7 @@ if (isset($_GET['room'])) {
 if (isset($_GET['error'])) {
     $error = htmlspecialchars($_GET['error']);
 }
+$password = "";
 if (isset($_GET['pass'])) {
     $password = htmlspecialchars($_GET['pass']);
 }
