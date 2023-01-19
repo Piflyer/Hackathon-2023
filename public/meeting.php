@@ -613,6 +613,6 @@ serverURL: https://winterwonderland.azurewebsites.net;"
     // 'user-' + Math.round(Math.random() * 10000)
     document.getElementById('player').setAttribute('player-info', 'name', "<?= $_POST['username']; ?>");
 </script>
-<script src="js/dynamic-room.component.js.php?room=<?= $_POST['room'] ?>"></script>
+<script src="js/dynamic-room.component.js.php?room=<?= $_POST['room'] ?>&name=<?= $_POST['username'] ?>"></script>
 </body>
 </html>

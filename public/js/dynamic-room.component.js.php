@@ -1,5 +1,6 @@
 <?php
 header("Content-Type: application/javascript; charset=UTF-8");
+$_GET['name'] = htmlspecialchars($_GET['name']);
 ?>
 /**
  * Setup the Networked-Aframe scene component based on query parameters
@@ -50,7 +51,7 @@ function onConnecth() {
     console.log("something went horribly wrong");
     }
     else {
-        document.getElementById('player').setAttribute('player-info', 'name', getUrlParams().username);
+        document.getElementById('player').setAttribute('player-info', 'name', "<?= $_GET['name']; ?>");
         NAF.connection.adapter.enableCamera(!cameraEnabled);
         NAF.connection.adapter.enableMicrophone(!micEnabled);
         console.log("First Load");
