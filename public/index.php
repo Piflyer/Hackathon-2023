@@ -9,25 +9,27 @@ if (!(isset($_SESSION['id']) && isset($_SESSION['user_name']))) {
     exit();
 }
 $error = false;
-if(isset($_GET['room'])) {
+if (isset($_GET['room'])) {
     $room = $_GET['room'];
-    if(!preg_match("/^[0-9]{5}$/", $room)) {
+    if (!preg_match("/^[0-9]{5}$/", $room)) {
         $error = "Invalid room ID";
     }
     require "internals/db_conn.php";
     $sql = "SELECT * FROM rooms WHERE id='$room'";
     $result = mysqli_query($conn, $sql);
-    if($result) {
-        if(mysqli_num_rows($result) === 0) {
+    if ($result) {
+        if (mysqli_num_rows($result) === 0) {
             $error = "Invalid room ID";
         }
-    }
-    else {
+    } else {
         $error = "Internal error";
     }
 }
-if(isset($_GET['error'])) {
+if (isset($_GET['error'])) {
     $error = htmlspecialchars($_GET['error']);
+}
+if (isset($_GET['pass'])) {
+    $password = htmlspecialchars($_GET['pass']);
 }
 ?>
 <!DOCTYPE html>
@@ -45,14 +47,16 @@ if(isset($_GET['error'])) {
             background: #1c1c1c;
             overflow: hidden;
         }
-        .startup{
+
+        .startup {
             z-index: 9998;
             position: fixed;
             width: 100vw;
             height: 100vh;
             background: #1a6bed;
         }
-        #onboard{
+
+        #onboard {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -68,6 +72,7 @@ if(isset($_GET['error'])) {
             padding: 20px;
             display: block;
         }
+
         input[type=text] {
             display: block;
             text-align: center;
@@ -81,6 +86,7 @@ if(isset($_GET['error'])) {
             outline: 1px black;
             margin-bottom: 15px;
         }
+
         .continuebutton {
             position: relative;
             margin-left: auto;
@@ -98,6 +104,7 @@ if(isset($_GET['error'])) {
             display: block;
             margin-top: 10px;
         }
+
         .selectbox {
             position: relative;
             margin-left: auto;
@@ -118,13 +125,16 @@ if(isset($_GET['error'])) {
             transition: 1s;
             color: #1a6bed;
         }
-        .selectbox:hover{
+
+        .selectbox:hover {
             background: #C6C6C6;
         }
-        #newmeeting{
+
+        #newmeeting {
             display: none;
         }
-        #existing{
+
+        #existing {
             display: none;
         }
     </style>
@@ -136,32 +146,35 @@ if(isset($_GET['error'])) {
         <div id="screen1">
             <p>Hangout with your friends in a private playground!</p>
             <button onclick="existingmeeting()" class="selectbox">
-            Join an existing meeting.
-        </button>
+                Join an existing meeting.
+            </button>
 
-        <button onclick="newmeeting()" class="selectbox">
-            Create a new meeting
-        </button>
+            <button onclick="newmeeting()" class="selectbox">
+                Create a new meeting
+            </button>
         </div>
         <div id="existing">
             <form method="post" action="meeting.php">
                 <p id="existing-code">Enter an existing meeting room join code:</p>
                 <input required name="room" type="text" id="room" placeholder="Meeting Room">
-                <p>Enter password:</p>
-                <input required name="password" type="text" id="password" placeholder="Password">
+                <p id="password-prompt">Enter password:</p>
+                <input required name="password" type="text" id="password" placeholder="Password"
+                       value="<?= $password ?>">
                 <p>Enter your name:</p>
-                <input required name="username" type="text" id="username-overlay" value="<?= $_SESSION['name']; ?>" placeholder="Your Name"/>
+                <input required name="username" type="text" id="username-overlay" value="<?= $_SESSION['name']; ?>"
+                       placeholder="Your Name"/>
                 <p>Choose a color for your avatar.</p>
                 <input required type="color" name="colour" id="colour">
                 <button class="continuebutton" type="submit" class="continuebutton">Join Meeting</button>
             </form>
-        </div >
+        </div>
         <div id="newmeeting">
             <form method="post" action="meeting.php">
                 <p>Your meeting room code:</p>
                 <input required name="room" type="text" id="room-new" placeholder="Meeting Room">
                 <p>Enter your name:</p>
-                <input required name="username" type="text" id="username-overlay-new" value="<?= $_SESSION['name']; ?>" placeholder="Your Name"/>
+                <input required name="username" type="text" id="username-overlay-new" value="<?= $_SESSION['name']; ?>"
+                       placeholder="Your Name"/>
                 <p>Choose a color for your avatar.</p>
                 <input required type="color" name="colour" id="colour-new">
                 <input type="hidden" name="password" id="hidden-password">
@@ -171,32 +184,34 @@ if(isset($_GET['error'])) {
 
 
         <script>
-            function generateMeetingCode(){
+            function generateMeetingCode() {
                 var code = "";
                 var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                for (var j = 0; j < 3; j++){
-                    for (var i = 0; i < 4; i++){
+                for (var j = 0; j < 3; j++) {
+                    for (var i = 0; i < 4; i++) {
                         code += possible.charAt(Math.floor(Math.random() * possible.length));
                     }
-                    if (j < 2){
+                    if (j < 2) {
                         code += "-";
                     }
                 }
-               return code;
+                return code;
             }
+
             function existingmeeting() {
                 document.getElementById("screen1").style.display = "none";
                 document.getElementById("existing").style.display = "block";
             }
+
             function newmeeting() {
                 fetch("internals/create_room.php")
                     .then((response) => response.json())
                     .then((data) => {
-                        if(data.error) {
+                        if (data.error) {
                             alert("Error creating room: " + data.error);
                             return;
                         }
-                        document.getElementById('room-new').value=data.id;
+                        document.getElementById('room-new').value = data.id;
                         document.getElementById("room-new").readOnly = true;
                         document.getElementById("screen1").style.display = "none";
                         document.getElementById("newmeeting").style.display = "block";
@@ -208,7 +223,9 @@ if(isset($_GET['error'])) {
                 var match;
                 var pl = /\+/g;  // Regex for replacing addition symbol with a space
                 var search = /([^&=]+)=?([^&]*)/g;
-                var decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')); };
+                var decode = function (s) {
+                    return decodeURIComponent(s.replace(pl, ' '));
+                };
                 var query = window.location.search.substring(1);
                 var urlParams = {};
 
@@ -221,18 +238,25 @@ if(isset($_GET['error'])) {
             }
             <?php
             if (!$error) {
-                if(isset($_GET['room'])) {
-                        echo 'existingmeeting();
-                document.getElementById("room").style.display = "none";
-                document.getElementById("existing-code").style.display = "none";';
+                if (isset($_GET['room'])) {
+                    echo 'existingmeeting();';
+                    if (!empty($_GET['room'])) {
+                        echo '
+                            document.getElementById("room").style.display = "none";
+                            document.getElementById("existing-code").style.display = "none";';
+                    }
+                    if(!empty($password)) {
+                        echo '
+                            document.getElementById("password").style.display = "none";
+                            document.getElementById("password-prompt").style.display = "none";';
                     }
                 }
-            else {
+            } else {
                 echo "alert('Error: $error');";
             }
             ?>
-            document.getElementById("colour").value = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
-            document.getElementById("colour-new").value = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+            document.getElementById("colour").value = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+            document.getElementById("colour-new").value = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
 
             document.getElementById("room").value = typeof getUrlParams().room == "undefined" ? "" : getUrlParams().room;
         </script>

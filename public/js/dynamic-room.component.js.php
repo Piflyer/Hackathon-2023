@@ -47,10 +47,9 @@ const micButton = document.getElementById('micaction');
 const screenButton = document.getElementById("screenshareaction");
 let first = true;
 function onConnecth() {
-    if(!first) {
-    console.log("something went horribly wrong");
-    }
-    else {
+    if (!first) {
+        console.log("something went horribly wrong");
+    } else {
         document.getElementById('player').setAttribute('player-info', 'name', "<?= $_GET['name']; ?>");
         NAF.connection.adapter.enableCamera(!cameraEnabled);
         NAF.connection.adapter.enableMicrophone(!micEnabled);
@@ -68,7 +67,7 @@ function onConnecth() {
     }
 }
 
-function disableVideo(){
+function disableVideo() {
 
     const stream = NAF.connection.adapter.getMediaStream();
     stream.getTracks().forEach(track => {
@@ -78,7 +77,7 @@ function disableVideo(){
     })
 
 }
-function finishLoad(){
+function finishLoad() {
     console.log('onConnect');
     console.log('onConnect', new Date());
     cameraButton.onclick = function () {
@@ -106,7 +105,7 @@ function checkDeviceSupport(callback) {
 
     if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
         // Firefox 38+ seems having support of enumerateDevicesx
-        navigator.enumerateDevices = function(callback) {
+        navigator.enumerateDevices = function (callback) {
             navigator.mediaDevices.enumerateDevices().then(callback);
         };
     }
@@ -142,8 +141,8 @@ function checkDeviceSupport(callback) {
     }
 
     MediaDevices = [];
-    navigator.enumerateDevices(function(devices) {
-        devices.forEach(function(_device) {
+    navigator.enumerateDevices(function (devices) {
+        devices.forEach(function (_device) {
             var device = {};
             for (var d in _device) {
                 device[d] = _device[d];
@@ -158,7 +157,7 @@ function checkDeviceSupport(callback) {
             }
 
             var skip;
-            MediaDevices.forEach(function(d) {
+            MediaDevices.forEach(function (d) {
                 if (d.id === device.id && d.kind === device.kind) {
                     skip = true;
                 }
@@ -208,9 +207,15 @@ function checkDeviceSupport(callback) {
             MediaDevices.push(device);
         });
 
-        if(callback) {
+        if (callback) {
             callback(
-                {"hasWebcam": hasWebcam, "hasMicrophone": hasMicrophone, "hasSpeakers": hasSpeakers, "isHTTPs": isHTTPs, "canEnumerateDevices": canEnumerate}
+                {
+                    "hasWebcam": hasWebcam,
+                    "hasMicrophone": hasMicrophone,
+                    "hasSpeakers": hasSpeakers,
+                    "isHTTPs": isHTTPs,
+                    "canEnumerateDevices": canEnumerate
+                }
             );
         }
     });

@@ -8,24 +8,23 @@ require "internals/db_conn.php";
 foreach ($_POST as $key => $value) {
     $_POST[$key] = htmlspecialchars(mysqli_escape_string($conn, $value), ENT_QUOTES);
 }
-if(!(isset($_POST['room']) && isset($_POST['username']) && isset($_POST['colour']) && isset($_POST['password']))) {
+if (!(isset($_POST['room']) && isset($_POST['username']) && isset($_POST['colour']) && isset($_POST['password']))) {
     header("Location: index.php?error=Invalid request");
 }
-if(!preg_match("/^[0-9]{5}$/", $_POST['room'])) {
+if (!preg_match("/^[0-9]{5}$/", $_POST['room'])) {
     header("Location: index.php?error=Invalid room ID");
 }
-if(!preg_match("/^#[a-fA-F0-9]{6}$/", $_POST['colour'])) {
+if (!preg_match("/^#[a-fA-F0-9]{6}$/", $_POST['colour'])) {
     header("Location: index.php?error=Invalid colour");
 }
 $sql = "SELECT * FROM rooms WHERE id='" . $_POST['room'] . "'";
 $result = mysqli_query($conn, $sql);
-if($result) {
-    if(mysqli_num_rows($result) === 0) {
+if ($result) {
+    if (mysqli_num_rows($result) === 0) {
         header("Location: index.php?error=Room not found");
-    }
-    else {
+    } else {
         $row = mysqli_fetch_assoc($result);
-        if($row['password'] !== $_POST['password']) {
+        if ($row['password'] !== $_POST['password']) {
             header("Location: index.php?error=Incorrect password");
         }
     }
@@ -40,64 +39,72 @@ if($result) {
     <title>Hackathon Metaverse</title>
     <style>
         @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
-      html, body {
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-          background: #1c1c1c;
-      }
-      .video-container {
-          width: calc(100% - 30px);
-          /*width: calc(100% - 430px);*/
-          height: calc(100% - 100px);
-          margin-top: 15px;
-          margin-left: 15px;
-          margin-right: 15px;
-          display: inline-block;
-          border-radius: 20px;
-          overflow: hidden;
-          z-index: 0;
-          display: inline-block;
-          background: #303030;
-          transtion: all 0.75s;
-      }
-      .controlpanel{
-          float: right;
-          width: calc(20% - 15px);
-          height: calc(100% - 30px);
-          margin-top: 15px;
-          margin-right: 15px;
-          overflow: hidden;
-          position: relative;
-          display: inline-block;
-      }
-      .uservideo{
-          width: 100%;
-          max-height: calc((100vh - 250)/ 4);
-          margin-bottom: 10px;
-          border-radius: 20px;
-          background: red;
-      }
-      .dialogbox{
-          position: absolute;
-          bottom: 0;
-          height: 200px;
-          width: 100%;
-          border-radius: 15px;
-          background: #303030;
-      }
-      .a-enter-vr-button {
-          display: none;
-      }
-      .startup{
-          z-index: 9998;
-          position: fixed;
-          width: 100vw;
-          height: 100vh;
-          background: #1a6bed;
-      }
-      #onboard{
+
+        html, body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background: #1c1c1c;
+        }
+
+        .video-container {
+            width: calc(100% - 30px);
+            /*width: calc(100% - 430px);*/
+            height: calc(100% - 100px);
+            margin-top: 15px;
+            margin-left: 15px;
+            margin-right: 15px;
+            display: inline-block;
+            border-radius: 20px;
+            overflow: hidden;
+            z-index: 0;
+            display: inline-block;
+            background: #303030;
+            transtion: all 0.75s;
+        }
+
+        .controlpanel {
+            float: right;
+            width: calc(20% - 15px);
+            height: calc(100% - 30px);
+            margin-top: 15px;
+            margin-right: 15px;
+            overflow: hidden;
+            position: relative;
+            display: inline-block;
+        }
+
+        .uservideo {
+            width: 100%;
+            max-height: calc((100vh - 250) / 4);
+            margin-bottom: 10px;
+            border-radius: 20px;
+            background: red;
+        }
+
+        .dialogbox {
+            position: absolute;
+            bottom: 0;
+            height: 200px;
+            width: 100%;
+            border-radius: 15px;
+            background: #303030;
+        }
+
+        .a-enter-vr-button {
+            display: none;
+        }
+
+        .startup {
+            z-index: 9998;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: #1a6bed;
+        }
+
+        #onboard {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -109,9 +116,10 @@ if($result) {
             border-radius: 20px;
             text-align: center;
             padding: 20px;
-          display: block;
-      }
-      .continuebutton {
+            display: block;
+        }
+
+        .continuebutton {
             position: absolute;
             bottom: 20px;
             left: 50%;
@@ -127,64 +135,70 @@ if($result) {
             font-weight: bold;
             cursor: pointer;
             display: block;
-      }
-      .useractionbox{
-          height: 70px;
-          width: 100%;
-          bottom: 0;
-      }
-      .callactionbutton{
-          display: inline-block;
-          width: 45px;
-          height: 45px;
-          padding: 2.5px;
-          color: white;
-          border-radius: 75px;
-          outline: none;
+        }
+
+        .useractionbox {
+            height: 70px;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .callactionbutton {
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            padding: 2.5px;
+            color: white;
+            border-radius: 75px;
+            outline: none;
             border: none;
-          margin-left: 5px;
+            margin-left: 5px;
             margin-right: 5px;
-          position: relative;
-      }
-      .meetingInfo{
-          postion: relative;
-          float: left;
-          display: inline-block;
-          line-height: 50px;
-          width: auto;
-          height: 50px;
-          font-size: 18px;
-          color: white;
-          margin-left: 15px;
-      }
-      .warningbox {
-          postion: relative;
-          float: right;
-          display: inline-block;
-          line-height: 50px;
-          width: auto;
-          height: 50px;
-          font-size: 18px;
-          color: white;
-          margin-left: 15px;
-      }
-      .chatbox {
-          postion: relative;
-          width: 375px;
-          display: none;
-          height: 100%;
-          padding: 5px;
-          margin-top: 15px;
-          margin-right: 15px;
-          height: calc(100% - 110px);
-          float: right;
-          border-radius: 15px;
-          background: #303030;
-          z-index: 9999;
-          color: white;
-      }
-      .messageinput{
-          postion: absolute;
+            position: relative;
+        }
+
+        .meetingInfo {
+            postion: relative;
+            float: left;
+            display: inline-block;
+            line-height: 50px;
+            width: auto;
+            height: 50px;
+            font-size: 18px;
+            color: white;
+            margin-left: 15px;
+        }
+
+        .warningbox {
+            postion: relative;
+            float: right;
+            display: inline-block;
+            line-height: 50px;
+            width: auto;
+            height: 50px;
+            font-size: 18px;
+            color: white;
+            margin-left: 15px;
+        }
+
+        .chatbox {
+            postion: relative;
+            width: 375px;
+            display: none;
+            height: 100%;
+            padding: 5px;
+            margin-top: 15px;
+            margin-right: 15px;
+            height: calc(100% - 110px);
+            float: right;
+            border-radius: 15px;
+            background: #303030;
+            z-index: 9999;
+            color: white;
+        }
+
+        .messageinput {
+            postion: absolute;
             width: calc(100% - 30px);
             height: 30px;
             border-radius: 10px;
@@ -194,41 +208,44 @@ if($result) {
             padding-right: 5px;
             padding-top: 2.5px;
             padding-bottom: 2.5px;
-          background: #464646;
-          color: white;
-          text-align: left;
-          display: block;
-          outline: none;
-          border: none;
-          margin-top: 5px;
-            bottom: 0px;
-      }
-      .textbox{
-          postion: relative;
-          margin-left: 10px;
-          font-size: 18px;
-          line-height: 23px;
-          overflow: scroll;
-          width: calc(100% - 20px);
-          height: calc(100% - 100px);
-      }
-      .miccaminfo {
-          position: fixed;
-          z-index: 9999;
-            width: 300px;
-          padding: 10px;
-          border-radius: 15px;
-          bottom: 100px;
-          font-size: 20px;
-          text-align: center;
-          vertical-align: center;
+            background: #464646;
             color: white;
-          height: 70px;
-          backdrop-filter: blur(3px);
-          background: rgba(70, 70, 70, 0.5);
-          left: 50%;
-          transform: translateX(-50%);
-      }
+            text-align: left;
+            display: block;
+            outline: none;
+            border: none;
+            margin-top: 5px;
+            bottom: 0px;
+        }
+
+        .textbox {
+            postion: relative;
+            margin-left: 10px;
+            font-size: 18px;
+            line-height: 23px;
+            overflow: scroll;
+            width: calc(100% - 20px);
+            height: calc(100% - 100px);
+        }
+
+        .miccaminfo {
+            position: fixed;
+            z-index: 9999;
+            width: 300px;
+            padding: 10px;
+            border-radius: 15px;
+            bottom: 100px;
+            font-size: 20px;
+            text-align: center;
+            vertical-align: center;
+            color: white;
+            height: 70px;
+            backdrop-filter: blur(3px);
+            background: rgba(70, 70, 70, 0.5);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
         .chatnotif {
             position: fixed;
             z-index: 9999;
@@ -295,8 +312,10 @@ if($result) {
             // notice that color and name are both listed in the schema; NAF will only keep
             // properties declared in the schema in sync.
             schema: {
-                name: { type: 'string',
-                    default: 'user-' + Math.round(Math.random() * 10000) },
+                name: {
+                    type: 'string',
+                    default: 'user-' + Math.round(Math.random() * 10000)
+                },
                 color: {
                     type: 'color', // btw: color is just a string under the hood in A-Frame
                     default: window.ntExample.randomColor()
@@ -333,7 +352,7 @@ if($result) {
 
             update: function () {
                 console.log("update", "avatar")
-                if(this.head){
+                if (this.head) {
                     this.head.addEventListener('model-loaded', (e) => {
                         console.log('this.head exists!');
                         console.log(this.el.querySelector('.head').getObject3D("mesh"));
@@ -366,60 +385,60 @@ if($result) {
              networked-scene="onConnect: onConnect;
 serverURL: https://winterwonderland.azurewebsites.net;"
              dynamic-room
-            gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/v1/decoders/"
+             gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/v1/decoders/"
              renderer="colorManagement: true">
         <!-- Avatar -->
         <a-entity position="0 7 0" particle-system="preset: snow" particleCount="20000" maxAge="2"></a-entity>
         <a-assets>
             <a-entity id="mute-img" src="https://cdn-icons-png.flaticon.com/512/189/189653.png"></a-entity>
             <a-assets-item id="navmesh" src="assets/navmesh.glb"></a-assets-item>
-            <a-entity id="avatar" src="/assets/avatar.glb" ></a-entity>
-        <template id="avatar-template">
-            <a-entity class="avatar" player-info networked-audio-source >
-                <a-entity gltf-model="#avatar" class="head" scale="0.75 0.75 0.75" position="0 -1 0.25">
+            <a-entity id="avatar" src="/assets/avatar.glb"></a-entity>
+            <template id="avatar-template">
+                <a-entity class="avatar" player-info networked-audio-source>
+                    <a-entity gltf-model="#avatar" class="head" scale="0.75 0.75 0.75" position="0 -1 0.25">
+                    </a-entity>
+                    <a-text
+                            class="nametag"
+                            value="NOT WORKING"
+                            rotation="0 180 0"
+                            position=".25 -.65 0"
+                            side="double"
+                            scale=".5 .5 .5"
+                    ></a-text>
+                    <a-plane
+                            color="#FFF"
+                            width="1"
+                            height=".75"
+                            position="0 .6 .2"
+                            material="side: front"
+                            networked-video-source
+                    ></a-plane>
+                    <!--                <a-plane-->
+                    <!--                        color="#FFF"-->
+                    <!--                        width="1"-->
+                    <!--                        height=".75"-->
+                    <!--                        position="0 1.8 .2"-->
+                    <!--                        material="side: front"-->
+                    <!--                        networked-video-source="streamName: screen"-->
+                    <!--                ></a-plane>-->
+                    <a-plane
+                            color="#FFF"
+                            width="1"
+                            height=".75"
+                            position="0 .6 .2"
+                            material="side: back"
+                            networked-video-source
+                    ></a-plane>
                 </a-entity>
-                <a-text
-                        class="nametag"
-                        value="NOT WORKING"
-                        rotation="0 180 0"
-                        position=".25 -.65 0"
-                        side="double"
-                        scale=".5 .5 .5"
-                ></a-text>
-                <a-plane
-                        color="#FFF"
-                        width="1"
-                        height=".75"
-                        position="0 .6 .2"
-                        material="side: front"
-                        networked-video-source
-                ></a-plane>
-<!--                <a-plane-->
-<!--                        color="#FFF"-->
-<!--                        width="1"-->
-<!--                        height=".75"-->
-<!--                        position="0 1.8 .2"-->
-<!--                        material="side: front"-->
-<!--                        networked-video-source="streamName: screen"-->
-<!--                ></a-plane>-->
-                <a-plane
-                        color="#FFF"
-                        width="1"
-                        height=".75"
-                        position="0 .6 .2"
-                        material="side: back"
-                        networked-video-source
-                ></a-plane>
-            </a-entity>
-        </template>
+            </template>
             <!-- Bullet -->
             <template id="bullet-template">
                 <a-entity>
                     <a-sphere class="bullet" scale="0.1 0.1 0.1" color="#fff"></a-sphere>
                 </a-entity>
             </template>
-        <a-asset-item id="camp" src="assets/camp.glb"></a-asset-item>
-        <!-- /Templates -->
+            <a-asset-item id="camp" src="assets/camp.glb"></a-asset-item>
+            <!-- /Templates -->
         </a-assets>
 
         <a-entity id="rig">
@@ -435,28 +454,29 @@ serverURL: https://winterwonderland.azurewebsites.net;"
                     wasd-controls="acceleration:15;">
             </a-entity>
         </a-entity>
-<!--        <a-entity>-->
-<!--            <a-plane-->
-<!--                    color="#FFF"-->
-<!--                    width="8"-->
-<!--                    height="4.5"-->
-<!--                    position="14 3 15"-->
-<!--                    material="side: back"-->
-<!--                    networked-video-source="streamName: screen"-->
-<!--        </a-entity>-->
-<!--        <a-plane-->
-<!--                color="#FFF"-->
-<!--                width="8"-->
-<!--                height="4.5"-->
-<!--                position="12 3 15"-->
-<!--                material="side: back"-->
-<!--                networked-->
-<!--                networked-video-source="streamName: screen"-->
-<!--        ></a-plane>-->
+        <!--        <a-entity>-->
+        <!--            <a-plane-->
+        <!--                    color="#FFF"-->
+        <!--                    width="8"-->
+        <!--                    height="4.5"-->
+        <!--                    position="14 3 15"-->
+        <!--                    material="side: back"-->
+        <!--                    networked-video-source="streamName: screen"-->
+        <!--        </a-entity>-->
+        <!--        <a-plane-->
+        <!--                color="#FFF"-->
+        <!--                width="8"-->
+        <!--                height="4.5"-->
+        <!--                position="12 3 15"-->
+        <!--                material="side: back"-->
+        <!--                networked-->
+        <!--                networked-video-source="streamName: screen"-->
+        <!--        ></a-plane>-->
 
-<!--        <a-entity environment="preset:arches"></a-entity>-->
-<!--        <a-entity environment="preset: forest; groundColor: #445; grid: cross"></a-entity>-->
-        <a-gltf-model src="#navmesh" class="navmesh" position="0 0 0" scale="1 1 1" navmesh="false: true" visible="false"></a-gltf-model>
+        <!--        <a-entity environment="preset:arches"></a-entity>-->
+        <!--        <a-entity environment="preset: forest; groundColor: #445; grid: cross"></a-entity>-->
+        <a-gltf-model src="#navmesh" class="navmesh" position="0 0 0" scale="1 1 1" navmesh="false: true"
+                      visible="false"></a-gltf-model>
         <a-entity gltf-model="#camp" position="0 0 0" scale="1 1 1" shadow="cast: true"></a-entity>
         <a-sky color="#8cd7de"></a-sky>
         <a-entity light="type:ambient;intensity:0.75"></a-entity>
@@ -470,26 +490,33 @@ serverURL: https://winterwonderland.azurewebsites.net;"
 <div class="chatbox">
     <h2 style="margin-left: 10px; display: inline-block; margin-bottom: 5px;">Messages:</h2>
     <div class="textbox" id="textbox"></div>
-    <input class="messageinput" type="text" id="message" placeholder="Enter message" style="margin-left: 10px; display: inline-block">
+    <input class="messageinput" type="text" id="message" placeholder="Enter message"
+           style="margin-left: 10px; display: inline-block">
 </div>
 <div class="useractionbox">
     <div class="meetingInfo" id="meetinginfo">
     </div>
     <div style="width: 300px; height: 50px; justify-content: center; margin-left: auto; margin-right: auto; margin-top: 15px;">
-<!--        <button class="callactionbutton" style="background: #db2e2e" id="micaction"><i class="bi bi-mic-mute"></i></button>-->
-<!--        <button class="callactionbutton" style="background: #db2e2e" id="cameraaction"><i class="bi bi-camera-video-off"></i></button>-->
-        <button class="callactionbutton" style="background: #868686" id="micaction"><i class="bi bi-exclamation-triangle"></i></button>
-        <button class="callactionbutton" style="background: #868686" id="cameraaction"><i class="bi bi-exclamation-triangle"></i></button>
-        <button class="callactionbutton" style="background: #303030" id="chatlauncher" onclick="toggleChat()"><i class="bi bi-chat-left-text"></i></button>
-<!--        <button class="callactionbutton" style="background: #db2e2e" id="screenshareaction"><i class="bi bi-projector"></i></button>-->
-        <button class="callactionbutton" style="background: #303030" id="sharebutton" onclick="shareMeetingInfo()"><i class="bi bi-share-fill"></i></button>
-        <button class="callactionbutton" style="background: #db2e2e" id="leavebutton" onclick="leave(); window.location.href = 'index.php';"><i class="bi bi-box-arrow-left"></i></button>
+        <!--        <button class="callactionbutton" style="background: #db2e2e" id="micaction"><i class="bi bi-mic-mute"></i></button>-->
+        <!--        <button class="callactionbutton" style="background: #db2e2e" id="cameraaction"><i class="bi bi-camera-video-off"></i></button>-->
+        <button class="callactionbutton" style="background: #868686" id="micaction"><i
+                    class="bi bi-exclamation-triangle"></i></button>
+        <button class="callactionbutton" style="background: #868686" id="cameraaction"><i
+                    class="bi bi-exclamation-triangle"></i></button>
+        <button class="callactionbutton" style="background: #303030" id="chatlauncher" onclick="toggleChat()"><i
+                    class="bi bi-chat-left-text"></i></button>
+        <!--        <button class="callactionbutton" style="background: #db2e2e" id="screenshareaction"><i class="bi bi-projector"></i></button>-->
+        <button class="callactionbutton" style="background: #303030" id="sharebutton" onclick="shareMeetingInfo()"><i
+                    class="bi bi-share-fill"></i></button>
+        <button class="callactionbutton" style="background: #db2e2e" id="leavebutton"
+                onclick="leave(); window.location.href = 'index.php';"><i class="bi bi-box-arrow-left"></i></button>
     </div>
 </div>
 <script>
     let unread = false;
     let ascene = document.querySelector('a-scene');
     const chatbox = document.getElementsByClassName("chatbox");
+
     function markasunread() {
         unread = false;
         document.getElementById("chatlauncher").innerHTML = "<i class=\"bi bi-chat-left-text\"></i>";
@@ -499,7 +526,7 @@ serverURL: https://winterwonderland.azurewebsites.net;"
 
     function toggleChat() {
         markasunread();
-        if(chatbox[0].style.display === "none" || chatbox[0].style.display === "") {
+        if (chatbox[0].style.display === "none" || chatbox[0].style.display === "") {
             document.getElementsByClassName("chatbox")[0].style.display = "block";
             document.getElementsByClassName("video-container")[0].style.setProperty('width', 'calc(100% - 430px)');
         } else {
@@ -508,35 +535,38 @@ serverURL: https://winterwonderland.azurewebsites.net;"
         }
         ascene.resize();
     }
-    easyrtc.setOnError(function(errorObject){
+
+    easyrtc.setOnError(function (errorObject) {
         console.log("easyrtc error: " + errorObject.errorText);
     });
+
     function shareMeetingInfo() {
-        document.getElementById("chatnotif").innerHTML = "Share this meeting link with your friends: <a href='http://" + window.location.host + "/index.php?room=<?= $_POST['room']; ?>'>http://" + window.location.host + "/index.php?room=<?= $_POST['room']; ?></a>";
+        document.getElementById("chatnotif").innerHTML = "Share this meeting link with your friends: <a href='http://" + window.location.host + "/index.php?room=<?= $_POST['room']; ?>&pass=<?= $_POST['password'] ?>'>http://" + window.location.host + "/index.php?room=<?= $_POST['room']; ?>&pass=<?= $_POST['password'] ?></a>";
         document.getElementById("chatnotif").style.display = "block";
-        setTimeout(function() {
+        setTimeout(function () {
             document.getElementById("chatnotif").style.display = "none";
             document.getElementById("chatnotif").innerHTML = "";
         }, 5000);
     }
-    function chatNotif(user, message){
-        console.log("chatNotif");
-    if(chatbox[0].style.display === "none" || chatbox[0].style.display === "") {
-        console.log("Message: " + message);
-        document.getElementById("chatnotif").innerHTML = user + ": " + message;
-        document.getElementById("chatnotif").style.display = "block";
-        unread = true;
-        setTimeout(function() {
-            document.getElementById("chatnotif").style.display = "none";
-            document.getElementById("chatnotif").innerHTML = "";
-            }, 5000);
-        }
-    else {
-        console.log("No Notification");
-        unread = false;
 
+    function chatNotif(user, message) {
+        console.log("chatNotif");
+        if (chatbox[0].style.display === "none" || chatbox[0].style.display === "") {
+            console.log("Message: " + message);
+            document.getElementById("chatnotif").innerHTML = user + ": " + message;
+            document.getElementById("chatnotif").style.display = "block";
+            unread = true;
+            setTimeout(function () {
+                document.getElementById("chatnotif").style.display = "none";
+                document.getElementById("chatnotif").innerHTML = "";
+            }, 5000);
+        } else {
+            console.log("No Notification");
+            unread = false;
+
+        }
     }
-    }
+
     // see issue https://github.com/networked-aframe/networked-aframe/issues/267
     NAF.schemas.getComponentsOriginal = NAF.schemas.getComponents;
     NAF.schemas.getComponents = (template) => {
@@ -553,23 +583,23 @@ serverURL: https://winterwonderland.azurewebsites.net;"
         const components = NAF.schemas.getComponentsOriginal(template);
         return components;
     };
-        NAF.schemas.add({
-            template: '#avatar-template',
-            components: [
-                'position',
-                'rotation',
-                {
-                    selector: '.head',
-                    component: 'material',
-                    property: 'color'
-                },
-                {
-                    selector: '.nametag',
-                    component: 'value'
-                },
-                'player-info'
-            ]
-        });
+    NAF.schemas.add({
+        template: '#avatar-template',
+        components: [
+            'position',
+            'rotation',
+            {
+                selector: '.head',
+                component: 'material',
+                property: 'color'
+            },
+            {
+                selector: '.nametag',
+                component: 'value'
+            },
+            'player-info'
+        ]
+    });
 
     //CHAT
 
@@ -583,10 +613,12 @@ serverURL: https://winterwonderland.azurewebsites.net;"
             // roomIndex++;
         }
     }
+
     const textbox = document.querySelector('#textbox');
     const messageinput = document.querySelector("#message");
     const chatuser = "<?= $_POST['username']; ?>";
-    NAF.connection.subscribeToDataChannel("chat", (senderId, dataType, data, targetId) => {console.log("msg", data, "from", senderId)
+    NAF.connection.subscribeToDataChannel("chat", (senderId, dataType, data, targetId) => {
+        console.log("msg", data, "from", senderId)
         console.log("msg", data, "from", senderId)
         textbox.innerHTML += data.user + ": " + data.txt + '<br>'
         textbox.scrollTop = textbox.scrollHeight;
@@ -598,7 +630,7 @@ serverURL: https://winterwonderland.azurewebsites.net;"
             markasunread();
         }
     });
-    messageinput.addEventListener("keyup", function(event) {
+    messageinput.addEventListener("keyup", function (event) {
         if (event.keyCode === 13 && messageinput.value != "") {
             event.preventDefault();
             textbox.innerHTML += "You: " + messageinput.value + '<br>'
