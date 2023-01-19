@@ -10,14 +10,14 @@ AFRAME.registerComponent('dynamic-room', {
     init: function () {
         console.log("Room: " + "<?= $_GET['room']; ?>");
 
-        let hasMic = false;
-        let hasCam = false;
+        window.hasMic = false;
+        window.hasCam = false;
         checkDeviceSupport((data) => {
             console.log("Capabilities: ");
             console.log(data);
-            hasMic = data.hasMicrophone;
+            window.hasMic = data.hasMicrophone;
             console.log(data.hasMicrophone);
-            hasCam = data.hasWebcam;
+            window.hasCam = data.hasWebcam;
             console.log(data.hasWebcam);
         });
         console.log("Has cam: " + hasCam);
