@@ -17,11 +17,12 @@ AFRAME.registerComponent('dynamic-room', {
             console.log(data);
             hasMic = data.hasMicrophone;
             console.log(data.hasMicrophone);
-            console.log("Has mic: " + hasMic);
             hasCam = data.hasWebcam;
             console.log(data.hasWebcam);
-            console.log("Has cam: " + hasCam);
         });
+        console.log("Has cam: " + hasCam);
+        console.log("Has mic: " + hasMic);
+
         easyrtc.joinRoom("<?= $_GET['room']; ?>");
         const networkedComp = {
             room: "<?= $_GET['room']; ?>",
