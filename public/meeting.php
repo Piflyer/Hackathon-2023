@@ -48,7 +48,8 @@ if ($result) {
         }
         $inside = (array) json_decode($row['inside']);
         if(!in_array($_SESSION['id'], $inside)) {
-            $sql = "UPDATE rooms SET inside = " .  mysqli_escape_string($conn, json_encode(array_push($inside, $_SESSION['id']))) . " WHERE id='" . $_POST['room'] . "'";
+            array_push($inside, $_SESSION['id']);
+            $sql = "UPDATE rooms SET inside = " . mysqli_escape_string($conn, json_encode($inside)) . " WHERE id='" . $_POST['room'] . "'";
             $result = mysqli_query($conn, $sql);
             if (!$result) {
                 exit("Internal error");
@@ -737,7 +738,7 @@ serverURL: https://winterwonderland.azurewebsites.net;"
                         console.log("Still alive");
                     }
                 });
-    }, 10000);
+    }, 30000);
 </script>
 <script src="js/dynamic-room.component.js.php?room=<?= $_POST['room'] ?>&name=<?= $_POST['username'] ?>"></script>
 </body>
