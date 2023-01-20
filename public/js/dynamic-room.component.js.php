@@ -12,6 +12,7 @@ AFRAME.registerComponent('dynamic-room', {
 
         window.hasMic = false;
         window.hasCam = false;
+        window.dynamicRoomComponent = this;
         checkDeviceSupport((data) => {
             console.log("Capabilities: ");
             console.log(data);
@@ -19,27 +20,28 @@ AFRAME.registerComponent('dynamic-room', {
             console.log(data.hasMicrophone);
             window.hasCam = data.hasWebcam;
             console.log(data.hasWebcam);
-        });
-        console.log("Has cam: " + hasCam);
-        console.log("Has mic: " + hasMic);
 
-        easyrtc.joinRoom("<?= $_GET['room']; ?>");
-        const networkedComp = {
-            room: "<?= $_GET['room']; ?>",
-            debug: true,
-            audio: hasMic,
-            onConnect: onConnecth,
-            adapter: "easyrtc",
-            video: hasCam,
-            serverURL: "https://winterwonderland.azurewebsites.net"
-        };
-        console.info('Init networked-aframe with settings:', networkedComp);
-        console.log(this.el);
-        console.log("setting it", this.el.setAttribute('networked-scene', networkedComp));
-        document.body.addEventListener('clientConnected', function (evt) {
-            onConnecth();
+            console.log("Has cam: " + hasCam);
+            console.log("Has mic: " + hasMic);
+
+            easyrtc.joinRoom("<?= $_GET['room']; ?>");
+            const networkedComp = {
+                room: "<?= $_GET['room']; ?>",
+                debug: true,
+                audio: hasMic,
+                onConnect: onConnecth,
+                adapter: "easyrtc",
+                video: hasCam,
+                serverURL: "https://winterwonderland.azurewebsites.net"
+            };
+            console.info('Init networked-aframe with settings:', networkedComp);
+            console.log(window.dynamicRoomComponent.el);
+            console.log("setting it", window.dynamicRoomComponent.el.setAttribute('networked-scene', networkedComp));
+            document.body.addEventListener('clientConnected', function (evt) {
+                onConnecth();
+            });
+            window.dynamicRoomComponent.el.emit("connect", null, false);
         });
-        this.el.emit("connect", null, false);
 
     },
 });
@@ -127,6 +129,13 @@ function checkDeviceSupport(callback) {
     }
 
     if (!canEnumerate) {
+        callback({
+            "hasMicrophone": false,
+            "hasSpeakers": false,
+            "hasWebcam": false,
+            "isHTTPs": isHTTPs,
+            "canEnumerateDevices": false
+        });
         return;
     }
 
