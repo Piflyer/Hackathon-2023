@@ -8,7 +8,7 @@ if(empty($_GET['pass'])) {
     exit();
 }
 if($_GET['pass'] != file_get_contents("../assets/secret.txt")) {
-    echo "{\"error\": \"Internal error 2\"}";
+    echo "{\"error\": \"Internal error\"}";
     exit();
 }
 
@@ -18,6 +18,6 @@ if ($result) {
     echo "{\"success\": \"Rooms deleted\"}";
     exit();
 } else {
-    echo "{\"error\": \"Internal error 3\"}";
+    echo "{\"error\": \"Internal error\"}";
     exit();
 }
