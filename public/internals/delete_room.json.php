@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 header("Content-Type: application/json; charset=UTF-8");
 session_start();
 require "db_conn.php";
+global $conn;
 if (!(isset($_SESSION['id']) && isset($_SESSION['user_name']))) {
     echo "{\"error\": \"Not logged in\"}";
     exit();

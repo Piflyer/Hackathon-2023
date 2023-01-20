@@ -40,6 +40,8 @@ if (isset($_GET['pass'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hackathon Metaverse</title>
     <style>
+        @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
+
         html, body {
             height: 100vh;
             margin: 0;
@@ -205,7 +207,7 @@ if (isset($_GET['pass'])) {
             }
 
             function newmeeting() {
-                fetch("internals/create_room.php")
+                fetch("internals/create_room.json.php")
                     .then((response) => response.json())
                     .then((data) => {
                         if (data.error) {
@@ -246,7 +248,7 @@ if (isset($_GET['pass'])) {
                             document.getElementById("room").style.display = "none";
                             document.getElementById("existing-code").style.display = "none";';
                     }
-                    if(!empty($password)) {
+                    if (!empty($password)) {
                         echo '
                             document.getElementById("password").style.display = "none";
                             document.getElementById("password-prompt").style.display = "none";';
@@ -260,6 +262,152 @@ if (isset($_GET['pass'])) {
             document.getElementById("colour-new").value = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
 
             document.getElementById("room").value = typeof getUrlParams().room == "undefined" ? "" : getUrlParams().room;
+
+            function checkDeviceSupport(callback) {
+                var hasMicrophone = false;
+                var hasSpeakers = false;
+                var hasWebcam = false;
+
+                var isMicrophoneAlreadyCaptured = false;
+                var isWebcamAlreadyCaptured = false;
+
+                if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+                    // Firefox 38+ seems having support of enumerateDevicesx
+                    navigator.enumerateDevices = function (callback) {
+                        navigator.mediaDevices.enumerateDevices().then(callback);
+                    };
+                }
+
+                var MediaDevices = [];
+                var isHTTPs = location.protocol === 'https:';
+                var canEnumerate = false;
+
+
+                if (typeof MediaStreamTrack !== 'undefined' && 'getSources' in MediaStreamTrack) {
+                    canEnumerate = true;
+                } else if (navigator.mediaDevices && !!navigator.mediaDevices.enumerateDevices) {
+                    canEnumerate = true;
+                }
+
+                if (!canEnumerate) {
+                    callback({
+                        "hasMicrophone": false,
+                        "hasSpeakers": false,
+                        "hasWebcam": false,
+                        "isHTTPs": isHTTPs,
+                        "canEnumerateDevices": false
+                    });
+                    return;
+                }
+
+                if (!navigator.enumerateDevices && window.MediaStreamTrack && window.MediaStreamTrack.getSources) {
+                    navigator.enumerateDevices = window.MediaStreamTrack.getSources.bind(window.MediaStreamTrack);
+                }
+
+                if (!navigator.enumerateDevices && navigator.enumerateDevices) {
+                    navigator.enumerateDevices = navigator.enumerateDevices.bind(navigator);
+                }
+
+                if (!navigator.enumerateDevices) {
+                    if (callback) {
+                        callback();
+                    }
+                    return;
+                }
+
+                MediaDevices = [];
+                navigator.enumerateDevices(function (devices) {
+                    devices.forEach(function (_device) {
+                        var device = {};
+                        for (var d in _device) {
+                            device[d] = _device[d];
+                        }
+
+                        if (device.kind === 'audio') {
+                            device.kind = 'audioinput';
+                        }
+
+                        if (device.kind === 'video') {
+                            device.kind = 'videoinput';
+                        }
+
+                        var skip;
+                        MediaDevices.forEach(function (d) {
+                            if (d.id === device.id && d.kind === device.kind) {
+                                skip = true;
+                            }
+                        });
+
+                        if (skip) {
+                            return;
+                        }
+
+                        if (!device.deviceId) {
+                            device.deviceId = device.id;
+                        }
+
+                        if (!device.id) {
+                            device.id = device.deviceId;
+                        }
+
+                        if (!device.label) {
+                            device.label = 'Please invoke getUserMedia once.';
+                            if (!isHTTPs) {
+                                device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
+                            }
+                        } else {
+                            if (device.kind === 'videoinput' && !isWebcamAlreadyCaptured) {
+                                isWebcamAlreadyCaptured = true;
+                            }
+
+                            if (device.kind === 'audioinput' && !isMicrophoneAlreadyCaptured) {
+                                isMicrophoneAlreadyCaptured = true;
+                            }
+                        }
+
+                        if (device.kind === 'audioinput') {
+                            hasMicrophone = true;
+                        }
+
+                        if (device.kind === 'audiooutput') {
+                            hasSpeakers = true;
+                        }
+
+                        if (device.kind === 'videoinput') {
+                            hasWebcam = true;
+                        }
+
+                        // there is no 'videoouput' in the spec.
+
+                        MediaDevices.push(device);
+                    });
+
+                    if (callback) {
+                        callback(
+                            {
+                                "hasWebcam": hasWebcam,
+                                "hasMicrophone": hasMicrophone,
+                                "hasSpeakers": hasSpeakers,
+                                "isHTTPs": isHTTPs,
+                                "canEnumerateDevices": canEnumerate
+                            }
+                        );
+                    }
+                });
+            }
+
+            checkDeviceSupport((data) => {
+                if (!data.hasWebcam) {
+                    let warnEle = document.createElement("p");
+                    warnEle.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i> No webcam detected.';
+                    document.getElementById("onboard").appendChild(warnEle);
+                }
+                if (!data.hasMicrophone) {
+                    let warnEle = document.createElement("p");
+                    warnEle.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i> No microphone detected.';
+                    document.getElementById("onboard").appendChild(warnEle);
+                }
+            });
         </script>
     </div>
 </div>

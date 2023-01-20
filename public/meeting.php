@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require "internals/db_conn.php";
+global $conn;
 
 foreach ($_POST as $key => $value) {
     $_POST[$key] = htmlspecialchars(mysqli_escape_string($conn, $value), ENT_QUOTES);
@@ -521,32 +522,10 @@ serverURL: https://winterwonderland.azurewebsites.net;"
                     viewBox="0 0 16 16"
                     version="1.1"
                     id="svg6"
-                    sodipodi:docname="mic-mute.svg"
-                    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
-                    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-                    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:svg="http://www.w3.org/2000/svg">
                 <defs
                         id="defs10"/>
-                <sodipodi:namedview
-                        id="namedview8"
-                        pagecolor="#ffffff"
-                        bordercolor="#666666"
-                        borderopacity="1.0"
-                        inkscape:pageshadow="2"
-                        inkscape:pageopacity="0.0"
-                        inkscape:pagecheckerboard="0"
-                        showgrid="false"
-                        inkscape:zoom="37.1875"
-                        inkscape:cx="8"
-                        inkscape:cy="8"
-                        inkscape:window-width="1440"
-                        inkscape:window-height="804"
-                        inkscape:window-x="1920"
-                        inkscape:window-y="180"
-                        inkscape:window-maximized="1"
-                        inkscape:current-layer="svg6"/>
                 <path
                         d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3-9v4.879l-1-1V3a2 2 0 0 0-3.997-.118l-.845-.845A3.001 3.001 0 0 1 11 3z"
                         id="path2"/>
@@ -573,30 +552,10 @@ serverURL: https://winterwonderland.azurewebsites.net;"
                     viewBox="0 0 16 16"
                     version="1.1"
                     id="svg4"
-                    sodipodi:docname="camera-video-off.svg"
-                    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:svg="http://www.w3.org/2000/svg">
                 <defs
                         id="defs8"/>
-                <sodipodi:namedview
-                        id="namedview6"
-                        pagecolor="#ffffff"
-                        bordercolor="#666666"
-                        borderopacity="1.0"
-                        inkscape:pageshadow="2"
-                        inkscape:pageopacity="0.0"
-                        inkscape:pagecheckerboard="0"
-                        showgrid="false"
-                        inkscape:zoom="49"
-                        inkscape:cx="7.9897959"
-                        inkscape:cy="8.0102041"
-                        inkscape:window-width="1920"
-                        inkscape:window-height="956"
-                        inkscape:window-x="0"
-                        inkscape:window-y="28"
-                        inkscape:window-maximized="1"
-                        inkscape:current-layer="svg4"/>
                 <path
                         fill-rule="evenodd"
                         d="M10.961 12.365a1.99 1.99 0 0 0 .522-1.103l3.11 1.382A1 1 0 0 0 16 11.731V4.269a1 1 0 0 0-1.406-.913l-3.111 1.382A2 2 0 0 0 9.5 3H4.272l.714 1H9.5a1 1 0 0 1 1 1v6a1 1 0 0 1-.144.518l.605.847zM1.428 4.18A.999.999 0 0 0 1 5v6a1 1 0 0 0 1 1h5.014l.714 1H2a2 2 0 0 1-2-2V5c0-.675.334-1.272.847-1.634l.58.814zM15 11.73l-3.5-1.555v-4.35L15 4.269v7.462zm-4.407 3.56-10-14 .814-.58 10 14-.814.58z"
