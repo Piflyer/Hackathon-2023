@@ -64,6 +64,7 @@ function onConnecth() {
         cameraEnabled = !cameraEnabled;
         micEnabled = !micEnabled;
         if(window.hasCam) {
+            cameraButton.title = "";
         cameraButton.style.background = cameraEnabled ? '#303030' : '#db2e2e';
         cameraButton.innerHTML = cameraEnabled ? "<i class=\"bi bi-camera-video-fill\"></i>" : "<i class=\"bi bi-camera-video-off\"></i>";
         }
@@ -74,6 +75,7 @@ function onConnecth() {
             }
         }
         if(window.hasMic) {
+            micButton.title = "";
             micButton.style.background = micEnabled ? '#303030' : '#db2e2e';
             micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute\"></i>";
         }
