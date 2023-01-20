@@ -1,7 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require "errors_if_testing.php";
 require "db_conn.php";
 global $conn;
 header("Content-Type: application/json; charset=UTF-8");
@@ -17,7 +15,7 @@ if($_GET['pass'] != file_get_contents("../assets/secret.txt")) {
 $sql = "DELETE FROM rooms WHERE last_edited < NOW() - INTERVAL 3 HOUR";
 $result = mysqli_query($conn, $sql);
 if ($result) {
-    echo "{\"success\": \"Room deleted\"}";
+    echo "{\"success\": \"Rooms deleted\"}";
     exit();
 } else {
     echo "{\"error\": \"Internal error\"}";

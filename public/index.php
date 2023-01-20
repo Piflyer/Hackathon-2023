@@ -1,7 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require "internals/errors_if_testing.php";
 session_start();
 
 if (!(isset($_SESSION['id']) && isset($_SESSION['user_name']))) {
@@ -31,7 +29,7 @@ if (isset($_GET['error'])) {
 $password = "";
 if (isset($_GET['pass'])) {
     $password = htmlspecialchars($_GET['pass']);
-}
+}aa
 ?>
 <!DOCTYPE html>
 <html lang="en">

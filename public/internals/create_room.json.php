@@ -1,7 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require "errors_if_testing.php";
 header("Content-Type: application/json; charset=UTF-8");
 session_start();
 require "db_conn.php";
