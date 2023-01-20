@@ -727,7 +727,7 @@ serverURL: https://winterwonderland.azurewebsites.net;"
     document.getElementById('player').setAttribute('player-info', 'name', "<?= $_POST['username']; ?>");
 
     setInterval(function () {
-            fetch("internals/stay_alive.json.php")
+            fetch("internals/stay_alive.json.php?room=<?= $_POST['room']; ?>")
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.error) {
@@ -737,7 +737,7 @@ serverURL: https://winterwonderland.azurewebsites.net;"
                         console.log("Still alive");
                     }
                 });
-    }, 1000);
+    }, 10000);
 </script>
 <script src="js/dynamic-room.component.js.php?room=<?= $_POST['room'] ?>&name=<?= $_POST['username'] ?>"></script>
 </body>
