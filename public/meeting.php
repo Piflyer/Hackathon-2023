@@ -511,10 +511,101 @@ serverURL: https://winterwonderland.azurewebsites.net;"
     <div style="width: 300px; height: 50px; justify-content: center; margin-left: auto; margin-right: auto; margin-top: 15px;">
         <!--        <button class="callactionbutton" style="background: #db2e2e" id="micaction"><i class="bi bi-mic-mute"></i></button>-->
         <!--        <button class="callactionbutton" style="background: #db2e2e" id="cameraaction"><i class="bi bi-camera-video-off"></i></button>-->
-        <button class="callactionbutton" style="background: #868686" id="micaction"><i
-                    class="bi bi-exclamation-triangle"></i></button>
-        <button class="callactionbutton" style="background: #868686" id="cameraaction"><i
-                    class="bi bi-exclamation-triangle"></i></button>
+        <button class="callactionbutton" style="background: #868686" id="micaction" title="Mic and camera access will be enabled once someone joins the room."><svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-mic-mute"
+                    viewBox="0 0 16 16"
+                    version="1.1"
+                    id="svg6"
+                    sodipodi:docname="mic-mute.svg"
+                    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+                    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+                    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:svg="http://www.w3.org/2000/svg">
+                <defs
+                        id="defs10" />
+                <sodipodi:namedview
+                        id="namedview8"
+                        pagecolor="#ffffff"
+                        bordercolor="#666666"
+                        borderopacity="1.0"
+                        inkscape:pageshadow="2"
+                        inkscape:pageopacity="0.0"
+                        inkscape:pagecheckerboard="0"
+                        showgrid="false"
+                        inkscape:zoom="37.1875"
+                        inkscape:cx="8"
+                        inkscape:cy="8"
+                        inkscape:window-width="1440"
+                        inkscape:window-height="804"
+                        inkscape:window-x="1920"
+                        inkscape:window-y="180"
+                        inkscape:window-maximized="1"
+                        inkscape:current-layer="svg6" />
+                <path
+                        d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3-9v4.879l-1-1V3a2 2 0 0 0-3.997-.118l-.845-.845A3.001 3.001 0 0 1 11 3z"
+                        id="path2" />
+                <path
+                        d="m9.486 10.607-.748-.748A2 2 0 0 1 6 8v-.878l-1-1V8a3 3 0 0 0 4.486 2.607zm-7.84-9.253 12 12 .708-.708-12-12-.708.708z"
+                        id="path4" />
+                <g
+                        style="fill:currentColor"
+                        id="g847"
+                        transform="matrix(0.46811952,0,0,0.46811952,8.0996707,8.0930413)">
+                    <path
+                            d="m 8.982,1.566 a 1.13,1.13 0 0 0 -1.96,0 L 0.165,13.233 C -0.292,14.011 0.256,15 1.145,15 h 13.713 c 0.889,0 1.438,-0.99 0.98,-1.767 z M 8,5 C 8.535,5 8.954,5.462 8.9,5.995 L 8.55,9.502 a 0.552,0.552 0 0 1 -1.1,0 L 7.1,5.995 A 0.905,0.905 0 0 1 8,5 Z m 0.002,6 a 1,1 0 1 1 0,2 1,1 0 0 1 0,-2 z"
+                            id="path838" />
+                </g>
+            </svg>
+        </button>
+        <button class="callactionbutton" style="background: #868686" id="cameraaction" title="Mic and camera access will be enabled once someone joins the room."><svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-camera-video-off"
+                    viewBox="0 0 16 16"
+                    version="1.1"
+                    id="svg4"
+                    sodipodi:docname="camera-video-off.svg"
+                    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:svg="http://www.w3.org/2000/svg">
+                <defs
+                        id="defs8" />
+                <sodipodi:namedview
+                        id="namedview6"
+                        pagecolor="#ffffff"
+                        bordercolor="#666666"
+                        borderopacity="1.0"
+                        inkscape:pageshadow="2"
+                        inkscape:pageopacity="0.0"
+                        inkscape:pagecheckerboard="0"
+                        showgrid="false"
+                        inkscape:zoom="49"
+                        inkscape:cx="7.9897959"
+                        inkscape:cy="8.0102041"
+                        inkscape:window-width="1920"
+                        inkscape:window-height="956"
+                        inkscape:window-x="0"
+                        inkscape:window-y="28"
+                        inkscape:window-maximized="1"
+                        inkscape:current-layer="svg4" />
+                <path
+                        fill-rule="evenodd"
+                        d="M10.961 12.365a1.99 1.99 0 0 0 .522-1.103l3.11 1.382A1 1 0 0 0 16 11.731V4.269a1 1 0 0 0-1.406-.913l-3.111 1.382A2 2 0 0 0 9.5 3H4.272l.714 1H9.5a1 1 0 0 1 1 1v6a1 1 0 0 1-.144.518l.605.847zM1.428 4.18A.999.999 0 0 0 1 5v6a1 1 0 0 0 1 1h5.014l.714 1H2a2 2 0 0 1-2-2V5c0-.675.334-1.272.847-1.634l.58.814zM15 11.73l-3.5-1.555v-4.35L15 4.269v7.462zm-4.407 3.56-10-14 .814-.58 10 14-.814.58z"
+                        id="path2" />
+                <g
+                        style="fill:currentColor"
+                        id="g834"
+                        transform="matrix(0.51696688,0,0,0.51696688,7.7087941,8.2657203)">
+                    <path
+                            d="m 8.982,1.566 a 1.13,1.13 0 0 0 -1.96,0 L 0.165,13.233 C -0.292,14.011 0.256,15 1.145,15 h 13.713 c 0.889,0 1.438,-0.99 0.98,-1.767 z M 8,5 C 8.535,5 8.954,5.462 8.9,5.995 L 8.55,9.502 a 0.552,0.552 0 0 1 -1.1,0 L 7.1,5.995 A 0.905,0.905 0 0 1 8,5 Z m 0.002,6 a 1,1 0 1 1 0,2 1,1 0 0 1 0,-2 z"
+                            id="path825" />
+                </g>
+            </svg></button>
         <button class="callactionbutton" style="background: #303030" id="chatlauncher" onclick="toggleChat()"><i
                     class="bi bi-chat-left-text"></i></button>
         <!--        <button class="callactionbutton" style="background: #db2e2e" id="screenshareaction"><i class="bi bi-projector"></i></button>-->

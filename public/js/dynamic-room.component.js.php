@@ -63,10 +63,26 @@ function onConnecth() {
         console.log("First Load");
         cameraEnabled = !cameraEnabled;
         micEnabled = !micEnabled;
+        if(window.hasCam) {
         cameraButton.style.background = cameraEnabled ? '#303030' : '#db2e2e';
         cameraButton.innerHTML = cameraEnabled ? "<i class=\"bi bi-camera-video-fill\"></i>" : "<i class=\"bi bi-camera-video-off\"></i>";
-        micButton.style.background = micEnabled ? '#303030' : '#db2e2e';
-        micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute-fill\"></i>";
+        }
+        else {
+            cameraButton.title = "No camera detected";
+            cameraButton.onclick = function() {
+                alert("No camera detected");
+            }
+        }
+        if(window.hasMic) {
+            micButton.style.background = micEnabled ? '#303030' : '#db2e2e';
+            micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute-fill\"></i>";
+        }
+        else {
+            micButton.title = "No microphone detected";
+            micButton.onclick = function() {
+                alert("No microphone detected");
+            }
+        }
         document.getElementById("miccaminfo").style.display = "none";
         first = false;
         console.log(first);
