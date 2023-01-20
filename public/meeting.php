@@ -49,7 +49,7 @@ if ($result) {
         $inside = (array) json_decode($row['inside']);
         if(!in_array($_SESSION['id'], $inside)) {
             array_push($inside, $_SESSION['id']);
-            $sql = "UPDATE rooms SET inside = " . mysqli_escape_string($conn, json_encode($inside)) . " WHERE id='" . $_POST['room'] . "'";
+            $sql = "UPDATE rooms SET inside = \"" . mysqli_escape_string($conn, json_encode($inside)) . "\" WHERE id='" . $_POST['room'] . "'";
             $result = mysqli_query($conn, $sql);
             if (!$result) {
                 exit("Internal error");
