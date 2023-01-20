@@ -75,7 +75,7 @@ function onConnecth() {
         }
         if(window.hasMic) {
             micButton.style.background = micEnabled ? '#303030' : '#db2e2e';
-            micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute-fill\"></i>";
+            micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute\"></i>";
         }
         else {
             micButton.title = "No microphone detected";
