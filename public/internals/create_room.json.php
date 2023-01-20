@@ -34,14 +34,14 @@ function tryagain($connection, $id){
         }
     }
     else {
-        echo "{\"error\": \"Internal error 1\"}";
+        echo "{\"error\": \"Internal error\"}";
         die(1);
     }
 }
 
 $id = tryagain($conn, $id);
 
-$sql = "INSERT INTO rooms (id, password, owner) VALUES ('$id', '$pass', '" . $_SESSION['id'] . "')";
+$sql = "INSERT INTO rooms (id, password, owner, inside) VALUES ('$id', '$pass', '" . $_SESSION['id'] . "', \"[\\\"" . $_SESSION['id'] . "\\\"]\")";
 $result = mysqli_query($conn, $sql);
 if($result) {
     echo "{
@@ -52,7 +52,7 @@ if($result) {
 }
 else {
     echo "{
-        \"error\": \"Internal error 2\"
+        \"error\": \"Internal error\"
     }";
     die(1);
 }

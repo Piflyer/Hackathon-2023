@@ -3,6 +3,12 @@
 require "internals/errors_if_testing.php";
 require "internals/db_conn.php";
 global $conn;
+session_start();
+
+if (!(isset($_SESSION['id']) && isset($_SESSION['user_name']))) {
+    header("Location: login.php?error=Please login to continue&continue=" . urlencode($_SERVER['REQUEST_URI']));
+    exit();
+}
 
 foreach ($_POST as $key => $value) {
     $_POST[$key] = htmlspecialchars(mysqli_escape_string($conn, $value), ENT_QUOTES);
@@ -33,10 +39,20 @@ $result = mysqli_query($conn, $sql);
 if ($result) {
     if (mysqli_num_rows($result) === 0) {
         header("Location: index.php?error=Room not found");
+        exit();
     } else {
         $row = mysqli_fetch_assoc($result);
         if ($row['password'] !== $_POST['password']) {
             header("Location: index.php?error=Incorrect password");
+            exit();
+        }
+        $inside = (array) json_decode($row['inside']);
+        if(!in_array($_SESSION['id'], $inside)) {
+            $sql = "UPDATE rooms SET inside = " .  mysqli_escape_string($conn, json_encode(array_push($inside, $_SESSION['id']))) . " WHERE id='" . $_POST['room'] . "'";
+            $result = mysqli_query($conn, $sql);
+            if (!$result) {
+                exit("Internal error");
+            }
         }
     }
 } else {
@@ -709,6 +725,19 @@ serverURL: https://winterwonderland.azurewebsites.net;"
     document.getElementById('player').setAttribute('player-info', 'color', "<?= $_POST['colour']; ?>");
     // 'user-' + Math.round(Math.random() * 10000)
     document.getElementById('player').setAttribute('player-info', 'name', "<?= $_POST['username']; ?>");
+
+    setInterval(function () {
+            fetch("internals/stay_alive.json.php")
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        console.log("Error updating still alive: ");
+                        console.log(data.error);
+                    } else {
+                        console.log("Still alive");
+                    }
+                });
+    }, 1000);
 </script>
 <script src="js/dynamic-room.component.js.php?room=<?= $_POST['room'] ?>&name=<?= $_POST['username'] ?>"></script>
 </body>
