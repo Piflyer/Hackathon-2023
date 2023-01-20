@@ -63,27 +63,19 @@ function onConnecth() {
         console.log("First Load");
         cameraEnabled = !cameraEnabled;
         micEnabled = !micEnabled;
-        if(window.hasCam) {
+        if (window.hasCam) {
             cameraButton.title = "";
-        cameraButton.style.background = cameraEnabled ? '#303030' : '#db2e2e';
-        cameraButton.innerHTML = cameraEnabled ? "<i class=\"bi bi-camera-video-fill\"></i>" : "<i class=\"bi bi-camera-video-off\"></i>";
-        }
-        else {
+            cameraButton.style.background = cameraEnabled ? '#303030' : '#db2e2e';
+            cameraButton.innerHTML = cameraEnabled ? "<i class=\"bi bi-camera-video-fill\"></i>" : "<i class=\"bi bi-camera-video-off\"></i>";
+        } else {
             cameraButton.title = "No camera detected";
-            cameraButton.onclick = function() {
-                alert("No camera detected");
-            }
         }
-        if(window.hasMic) {
+        if (window.hasMic) {
             micButton.title = "";
             micButton.style.background = micEnabled ? '#303030' : '#db2e2e';
             micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute\"></i>";
-        }
-        else {
+        } else {
             micButton.title = "No microphone detected";
-            micButton.onclick = function() {
-                alert("No microphone detected");
-            }
         }
         document.getElementById("miccaminfo").style.display = "none";
         first = false;
@@ -105,19 +97,23 @@ function disableVideo() {
 function finishLoad() {
     console.log('onConnect');
     console.log('onConnect', new Date());
-    cameraButton.onclick = function () {
+    cameraButton.onclick = hasCam ? function () {
         NAF.connection.adapter.enableCamera(!cameraEnabled);
         cameraEnabled = !cameraEnabled;
         cameraButton.style.background = cameraEnabled ? '#303030' : '#db2e2e';
         cameraButton.innerHTML = cameraEnabled ? "<i class=\"bi bi-camera-video-fill\"></i>" : "<i class=\"bi bi-camera-video-off\"></i>";
         console.log("video", cameraEnabled);
+    } : function () {
+        alert("No camera detected");
     };
-    micButton.onclick = function () {
+    micButton.onclick = hasMic ? function () {
         NAF.connection.adapter.enableMicrophone(!micEnabled);
         micEnabled = !micEnabled;
         micButton.style.background = micEnabled ? '#303030' : '#db2e2e';
         micButton.innerHTML = micEnabled ? "<i class=\"bi bi-mic-fill\"></i>" : "<i class=\"bi bi-mic-mute\"></i>";
         console.log("mic", micEnabled);
+    } : function () {
+        alert("No microphone detected");
     };
 }
 function checkDeviceSupport(callback) {
