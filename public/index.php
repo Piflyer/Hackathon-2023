@@ -29,7 +29,7 @@ if (isset($_GET['error'])) {
 $password = "";
 if (isset($_GET['pass'])) {
     $password = htmlspecialchars($_GET['pass']);
-}aa
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
