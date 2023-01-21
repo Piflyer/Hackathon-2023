@@ -9,12 +9,12 @@ if (!(isset($_SESSION['id']) && isset($_SESSION['user_name']))) {
     exit();
 }
 
-if(empty($_GET['id'])) {
+if(empty($_GET['room'])) {
     echo "{\"error\": \"No room ID provided\"}";
     exit();
 }
 
-$sql = "SELECT * FROM rooms WHERE id='" . $_GET['id'] . "'";
+$sql = "SELECT * FROM rooms WHERE id='" . $_GET['room'] . "'";
 $result = mysqli_query($conn, $sql);
 if($result) {
     if (mysqli_num_rows($result) === 0) {
@@ -26,7 +26,7 @@ if($result) {
             echo "{\"error\": \"You are not the owner of this room\"}";
             exit();
         } else {
-            $sql = "DELETE FROM rooms WHERE id='" . $_GET['id'] . "'";
+            $sql = "DELETE FROM rooms WHERE id='" . $_GET['room'] . "'";
             $result = mysqli_query($conn, $sql);
             if ($result) {
                 echo "{\"success\": \"Room deleted\"}";

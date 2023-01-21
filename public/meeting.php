@@ -3,6 +3,7 @@
 require "internals/errors_if_testing.php";
 require "internals/db_conn.php";
 global $conn;
+global $isOwner;
 session_start();
 
 if (!(isset($_SESSION['id']) && isset($_SESSION['user_name']))) {
@@ -46,8 +47,11 @@ if ($result) {
             header("Location: index.php?error=Incorrect password");
             exit();
         }
-        $inside = (array) json_decode($row['inside']);
-        if(!in_array($_SESSION['id'], $inside)) {
+        if ($row['owner'] === $_SESSION['id']) {
+            $isOwner = true;
+        }
+        $inside = (array)json_decode($row['inside']);
+        if (!in_array($_SESSION['id'], $inside)) {
             array_push($inside, $_SESSION['id']);
             $sql = "UPDATE rooms SET inside = \"" . mysqli_escape_string($conn, json_encode($inside)) . "\" WHERE id='" . $_POST['room'] . "'";
             $result = mysqli_query($conn, $sql);
@@ -686,6 +690,26 @@ serverURL: https://winterwonderland.azurewebsites.net;"
     //CHAT
 
     function leave() {
+        <?php
+        if ($isOwner) {
+            echo '
+            let doDelete = confirm("Would you also like to delete this room?");
+            if(doDelete) {
+                 fetch("internals/delete_room.json.php?room=' . $_POST['room'] . '");
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        console.log("Error deleting room: ");
+                        console.log(data.error);
+                        alert("Error deleting room!");
+                    } else {
+                        console.log("Deleted room");
+                    }
+                });
+            }
+            ';
+        }
+        ?>
         var scene = document.querySelector('a-scene');
         if (scene.hasAttribute('networked-scene')) {
             scene.removeAttribute('networked-scene');
@@ -728,16 +752,19 @@ serverURL: https://winterwonderland.azurewebsites.net;"
     document.getElementById('player').setAttribute('player-info', 'name', "<?= $_POST['username']; ?>");
 
     setInterval(function () {
-            fetch("internals/stay_alive.json.php?room=<?= $_POST['room']; ?>")
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.error) {
-                        console.log("Error updating still alive: ");
-                        console.log(data.error);
-                    } else {
-                        console.log("Still alive");
+        fetch("internals/stay_alive.json.php?room=<?= $_POST['room']; ?>")
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    console.log("Error updating still alive: ");
+                    console.log(data.error);
+                    if (data.error === "Room not found") {
+                        window.location.href = "index.php?error=Room was deleted";
                     }
-                });
+                } else {
+                    console.log("Still alive");
+                }
+            });
     }, 30000);
 </script>
 <script src="js/dynamic-room.component.js.php?room=<?= $_POST['room'] ?>&name=<?= $_POST['username'] ?>"></script>
