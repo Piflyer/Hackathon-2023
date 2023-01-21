@@ -695,7 +695,7 @@ serverURL: https://winterwonderland.azurewebsites.net;"
             echo '
             let doDelete = confirm("Would you also like to delete this room?");
             if(doDelete) {
-                 fetch("internals/delete_room.json.php?room=' . $_POST['room'] . '");
+                 fetch("internals/delete_room.json.php?room=' . $_POST['room'] . '")
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.error) {
