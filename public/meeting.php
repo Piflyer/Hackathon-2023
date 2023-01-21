@@ -765,7 +765,7 @@ serverURL: https://winterwonderland.azurewebsites.net;"
                     console.log("Still alive");
                 }
             });
-    }, 30000);
+    }, 10000);
 </script>
 <script src="js/dynamic-room.component.js.php?room=<?= $_POST['room'] ?>&name=<?= $_POST['username'] ?>"></script>
 </body>
