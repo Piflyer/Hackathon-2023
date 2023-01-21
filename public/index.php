@@ -9,7 +9,7 @@ if (!(isset($_SESSION['id']) && isset($_SESSION['user_name']))) {
 $error = false;
 if (isset($_GET['room'])) {
     $room = $_GET['room'];
-    if (!preg_match("/^[0-9]{5}$/", $room)) {
+    if (!preg_match("/^[a-zA-Z0-9]{3}\-[a-zA-Z0-9]{3}\-[a-zA-Z0-9]{3}$/", $room)) {
         $error = "Invalid room ID";
     }
     require "internals/db_conn.php";

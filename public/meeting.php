@@ -26,7 +26,7 @@ if (file_get_contents("assets/&!#.json")) {
 if (!(isset($_POST['room']) && isset($_POST['username']) && isset($_POST['colour']) && isset($_POST['password']))) {
     header("Location: index.php?error=Invalid request");
 }
-if (!preg_match("/^[0-9]{5}$/", $_POST['room'])) {
+if (!preg_match("/^[a-zA-Z0-9]{3}\-[a-zA-Z0-9]{3}\-[a-zA-Z0-9]{3}$/", $_POST['room'])) {
     header("Location: index.php?error=Invalid room ID");
 }
 if (!preg_match("/^#[a-fA-F0-9]{6}$/", $_POST['colour'])) {
