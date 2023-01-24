@@ -10,6 +10,7 @@
     "Sid220"
   ],
   "dependencies": {
-    "networked-aframe": "^0.11.0"
+    "networked-aframe": "^0.11.0",
+    "random-words": "^1.2.1"
   }
 }
