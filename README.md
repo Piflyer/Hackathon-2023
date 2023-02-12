@@ -1,7 +1,7 @@
 # Hackathon-2023
 [Sid](https://github.com/Sid220) and I worked on a mini metaverse that functions a video calling site. This can be used as a virtual hangout and get together for distant friends and family.
 
-View it live [here.](https://winterwonderland.vestal.tk/)
+View it live [here.](https://meet.thisistim.dev/)
 
 ## Specs:
 * Used Aframe.js and Networked Aframe
