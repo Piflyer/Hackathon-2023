@@ -2,7 +2,7 @@
 
 $sname = getenv("DATABASE_SERVER") ?: "localhost";
 $unmae = getenv("DATABASE_USER") ?: "root";
-$password = getenv("DATABASE_SERVER") ?: "rootpass";
+$password = getenv("DATABASE_PASS") ?: "rootpass";
 $db_name = getenv("DATABASE_NAME") ?: "metaverse";
 
 global $conn;
