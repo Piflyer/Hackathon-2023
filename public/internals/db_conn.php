@@ -1,9 +1,13 @@
 <?php
-
-$sname = getenv("DATABASE_SERVER") ?: "localhost";
-$unmae = getenv("DATABASE_USER") ?: "root";
-$password = getenv("DATABASE_PASS") ?: "rootpass";
-$db_name = getenv("DATABASE_NAME") ?: "metaverse";
+try {
+    $env = parse_ini_file('/home/sid/cd/.env');
+} catch (Exception) {
+    $env = [];
+}
+$sname = $env["DATABASE_SERVER"] ?? "localhost";
+$unmae = $env["DATABASE_USER"] ?? "root";
+$password = $env["DATABASE_PASS"] ?? "";
+$db_name = $env["DATABASE_NAME"] ?? "metaverse";
 
 global $conn;
 try {
