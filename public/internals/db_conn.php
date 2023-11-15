@@ -9,7 +9,7 @@ global $conn;
 try {
     $conn = mysqli_connect($sname, $unmae, $password, $db_name);
 } catch (mysqli_sql_exception) {
-    die("Error connecting to backend");
+    die("Error connecting to backend, ". $sname);
 }
 
 if (!$conn) {
