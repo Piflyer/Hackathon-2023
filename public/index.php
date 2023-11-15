@@ -175,13 +175,13 @@ if (isset($_GET['pass'])) {
         <div id="newmeeting">
             <form method="post" action="meeting.php">
                 <p>Your meeting room code:</p>
-                <input required name="room" type="text" id="room-new" placeholder="Meeting Room">
+                <input required name="room" spellcheck="false" type="text" id="room-new" placeholder="Meeting Room">
                 <p>Enter your name:</p>
-                <input required name="username" type="text" id="username-overlay-new" value="<?= $_SESSION['name']; ?>"
+                <input required name="username" spellcheck="false" type="text" id="username-overlay-new" value="<?= $_SESSION['name']; ?>"
                        placeholder="Your Name"/>
                 <p>Choose a color for your avatar.</p>
                 <input required type="color" name="colour" id="colour-new">
-                <input type="hidden" name="password" id="hidden-password">
+                <input type="hidden" name="password" id="hidden-password" />
                 <button class="continuebutton" type="submit" class="continuebutton">Start Meeting</button>
             </form>
         </div>

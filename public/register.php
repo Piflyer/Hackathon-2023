@@ -207,10 +207,10 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['name'])
                 <p class="error"><?php echo htmlspecialchars($_GET['error']); ?></p>
             <?php } ?>
             <p>Email</p>
-            <input type="email" name="email" placeholder="Email" required>
+            <input type="email" name="email" placeholder="Email" spellcheck="false" required>
 
             <p>Password</p>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="password" placeholder="Password" spellcheck="false" required>
 
             <p>Name</p>
             <input type="text" name="name" placeholder="Name" required>
