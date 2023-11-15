@@ -1,5 +1,8 @@
 <?php
+global $conn;
 require "internals/errors_if_testing.php";
+require "internals/db_conn.php";
+
 session_start();
 
 if (!(isset($_SESSION['id']) && isset($_SESSION['user_name']))) {

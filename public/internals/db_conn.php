@@ -1,13 +1,16 @@
 <?php
 
-$sname = "localhost";
-$unmae = "root";
-$password = "";
-
-$db_name = "metaverse";
+$sname = getenv("DATABASE_SERVER") ?: "localhost";
+$unmae = getenv("DATABASE_USER") ?: "root";
+$password = getenv("DATABASE_SERVER") ?: "rootpass";
+$db_name = getenv("DATABASE_NAME") ?: "metaverse";
 
 global $conn;
-$conn = mysqli_connect($sname, $unmae, $password, $db_name);
+try {
+    $conn = mysqli_connect($sname, $unmae, $password, $db_name);
+} catch (mysqli_sql_exception) {
+    die("Error connecting to backend");
+}
 
 if (!$conn) {
     echo "Connection failed!";
