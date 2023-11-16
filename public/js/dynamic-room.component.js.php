@@ -1,4 +1,6 @@
 <?php
+global $config;
+require "../../conf.php";
 header("Content-Type: application/javascript; charset=UTF-8");
 $_GET['name'] = htmlspecialchars($_GET['name']);
 ?>
@@ -32,7 +34,7 @@ AFRAME.registerComponent('dynamic-room', {
                 onConnect: onConnecth,
                 adapter: "easyrtc",
                 video: hasCam,
-                serverURL: "https://winterwonderland.azurewebsites.net"
+                serverURL: <?= $config["NODE_SERVER"] ?>
             };
             console.info('Init networked-aframe with settings:', networkedComp);
             console.log(window.dynamicRoomComponent.el);

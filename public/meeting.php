@@ -304,7 +304,7 @@ if ($result) {
     <script src="js/socket.io.slim.js"></script>
     <script src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
     <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
-    <script src="https://winterwonderland.azurewebsites.net/easyrtc/easyrtc.js"></script>
+    <script src="<?= $config["NODE_SERVER"] ?>/easyrtc/easyrtc.js"></script>
     <script src="dist/networked-aframe.js"></script>
     <script src="js/simple-navmesh-constraint.component.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-particle-system-component@master/dist/aframe-particle-system-component.min.js"></script>
@@ -417,7 +417,7 @@ if ($result) {
 <div class="video-container">
     <a-scene embedded
              networked-scene="onConnect: onConnect;
-serverURL: https://winterwonderland.azurewebsites.net;"
+serverURL: <?= $config['NODE_SERVER'] ?>;"
              dynamic-room
              gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/v1/decoders/"
              renderer="colorManagement: true">
