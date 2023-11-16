@@ -1,8 +1,10 @@
 <?php
 
 require "internals/errors_if_testing.php";
-require "internals/db_conn.php";
-global $conn;
+global $config;
+require "../conf.php";
+require_once("internals/db_conn.php");
+$conn = create_connection($config["DATABASE_SERVER"], $config["DATABASE_USER"], $config["DATABASE_PASS"], $config["DATABASE_NAME"]);
 global $isOwner;
 session_start();
 

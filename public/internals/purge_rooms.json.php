@@ -1,7 +1,9 @@
 <?php
 require "errors_if_testing.php";
-require "db_conn.php";
-global $conn;
+global $config;
+require "../../conf.php";
+require_once("db_conn.php");
+$conn = create_connection($config["DATABASE_SERVER"], $config["DATABASE_USER"], $config["DATABASE_PASS"], $config["DATABASE_NAME"]);
 header("Content-Type: application/json; charset=UTF-8");
 try {
     $env = parse_ini_file('/home/sid/cd/.env');
@@ -9,11 +11,11 @@ try {
     echo "{\"error\": \"Internal error\"}";
     exit();
 }
-if(empty($_GET['pass'])) {
+if (empty($_GET['pass'])) {
     echo "{\"error\": \"Internal error\"}";
     exit();
 }
-if($_GET['pass'] != $env["PURGE_PASS"]) {
+if ($_GET['pass'] != $env["PURGE_PASS"]) {
     echo "{\"error\": \"Internal error\"}";
     exit();
 }
