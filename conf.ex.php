@@ -5,5 +5,6 @@ $config = [
     "DATABASE_USER" => "root",
     "DATABASE_PASS" => "",
     "DATABASE_NAME" => "metaverse",
-    "NODE_SERVER" => "https://google.com"
+    "NODE_SERVER" => "https://google.com",
+    "PURGE_PASS" => "pass"
 ];
