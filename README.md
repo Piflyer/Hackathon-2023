@@ -14,12 +14,51 @@ View it live [here.](https://winterwonderland.plios.tech/)
 
 `git clone https://github.com/Piflyer/Hackathon-2023.git`
 
-2) Install the necessary dependencies by running:
+2) Install the necessary dependencies for the backend:
 
-`npm install`
+`cd Hackathon-2023 && npm install`
 
-3) Run it on your local network by running:
+3) Run the backend on your local network:
 
-`npm run`
+`npm run start &`
 
-The link should be live on your network. It will be hosted on port 8080.
+4) Configure to use your database and node server
+
+`cd public && cp conf.ex.php conf.php && nano conf.php`
+
+5) Run the frontend by pointing your server of choice to the `public` directory, for example with NGINX
+
+```nginx
+server {
+     root /directory/to/winterwonderland/public;
+     index index.php index.html index.htm;
+     server_name winterwonderland.mydomain.com;
+     location / {
+           try_files $uri $uri/ =404;
+     }
+     location ~ \.php$ {
+           include snippets/fastcgi-php.conf;
+           # Make sure you use your correct PHP version
+           fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+     }
+
+    listen 80;
+}
+```
+
+5) Create tables by running `db.sql`
+
+6) (Optional) Automatically discard older rooms by running a webcron:
+
+`curl https://interwonderland.mydomain.com/internals/purge_rooms.json.php?pass=PURGE_PASS`
+
+## Configuration Options:
+
+| Name            | Description                                                  |
+|-----------------|--------------------------------------------------------------|
+| DATABASE_SERVER | Server of the database                                       |
+| DATABASE_USER   | User of the database which has write access to DATABASE_NAME |
+| DATABASE_PASS   | Password of DATABASE_USER                                    |
+| DATABASE_NAME   | Name of database you have created tables for                 |
+| NODE_SERVER     | Server running NPM command                                   |
+| PURGE_PASS      | Password used to remove older rooms                          |
