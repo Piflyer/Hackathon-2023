@@ -34,7 +34,7 @@ AFRAME.registerComponent('dynamic-room', {
                 onConnect: onConnecth,
                 adapter: "easyrtc",
                 video: hasCam,
-                serverURL: <?= $config["NODE_SERVER"] ?>
+                serverURL: "<?= $config["NODE_SERVER"] ?>"
             };
             console.info('Init networked-aframe with settings:', networkedComp);
             console.log(window.dynamicRoomComponent.el);
