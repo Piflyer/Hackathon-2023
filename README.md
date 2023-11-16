@@ -24,7 +24,7 @@ View it live [here.](https://winterwonderland.plios.tech/)
 
 4) Configure to use your database and node server
 
-`cd public && cp conf.ex.php conf.php && nano conf.php`
+`cp conf.ex.php conf.php && nano conf.php`
 
 5) Run the frontend by pointing your server of choice to the `public` directory, for example with NGINX
 
