@@ -1,5 +1,6 @@
 node_modules
 conf.php
+ww_db_data
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

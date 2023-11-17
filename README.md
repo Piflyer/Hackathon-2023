@@ -8,7 +8,15 @@ View it live [here.](https://winterwonderland.plios.tech/)
 * JS based
 * Lightweight enough for Raspberry Pi
 
-## Installation:
+## Docker Installation (Recommended):
+1) Clone the repo
+`git clone https://github.com/Piflyer/Hackathon-2023.git`
+2) Start docker compose
+```sh
+docker compose up
+```
+
+## Manual Installation:
 
 1) Clone the project by running:
 
@@ -46,7 +54,7 @@ server {
 }
 ```
 
-5) Create tables by running `db.sql`
+5) Create database by running `db.sql`
 
 6) (Optional) Automatically discard older rooms by running a webcron:
 
