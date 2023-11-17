@@ -1,5 +1,10 @@
 <?php
+
 require "internals/errors_if_testing.php";
+global $config;
+require "../conf.php";
+require_once("internals/db_conn.php");
+$conn = create_connection($config["DATABASE_SERVER"], $config["DATABASE_USER"], $config["DATABASE_PASS"], $config["DATABASE_NAME"]);
 session_start();
 
 if (!(isset($_SESSION['id']) && isset($_SESSION['user_name']))) {
@@ -12,7 +17,6 @@ if (isset($_GET['room'])) {
     if (!preg_match("/^[a-zA-Z0-9]{3}\-[a-zA-Z0-9]{3}\-[a-zA-Z0-9]{3}$/", $room)) {
         $error = "Invalid room ID";
     }
-    require "internals/db_conn.php";
     $sql = "SELECT * FROM rooms WHERE id='$room'";
     $result = mysqli_query($conn, $sql);
     if ($result) {
@@ -172,13 +176,14 @@ if (isset($_GET['pass'])) {
         <div id="newmeeting">
             <form method="post" action="meeting.php">
                 <p>Your meeting room code:</p>
-                <input required name="room" type="text" id="room-new" placeholder="Meeting Room">
+                <input required name="room" spellcheck="false" type="text" id="room-new" placeholder="Meeting Room">
                 <p>Enter your name:</p>
-                <input required name="username" type="text" id="username-overlay-new" value="<?= $_SESSION['name']; ?>"
+                <input required name="username" spellcheck="false" type="text" id="username-overlay-new"
+                       value="<?= $_SESSION['name']; ?>"
                        placeholder="Your Name"/>
                 <p>Choose a color for your avatar.</p>
                 <input required type="color" name="colour" id="colour-new">
-                <input type="hidden" name="password" id="hidden-password">
+                <input type="hidden" name="password" id="hidden-password"/>
                 <button class="continuebutton" type="submit" class="continuebutton">Start Meeting</button>
             </form>
         </div>

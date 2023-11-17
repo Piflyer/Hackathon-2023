@@ -1,7 +1,10 @@
 <?php
 require "internals/errors_if_testing.php";
 session_start();
-require "internals/db_conn.php";
+global $config;
+require "../conf.php";
+require_once("internals/db_conn.php");
+$conn = create_connection($config["DATABASE_SERVER"], $config["DATABASE_USER"], $config["DATABASE_PASS"], $config["DATABASE_NAME"]);
 
 if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
     header("Location: index.php?error=You are already logged in");
@@ -176,13 +179,15 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                 <p class="error"><?php echo htmlspecialchars($_GET['error']); ?></p>
             <?php } ?>
             <p>Email</p>
-            <input type="email" name="email" placeholder="Email" required>
+            <input type="email" name="email" placeholder="Email" spellcheck="false" required>
             <p>Password</p>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="password" placeholder="Password" spellcheck="false" required>
 
             <button class="continuebutton" type="submit">Login</button>
         </form>
-        <p>No account? <a href="register.php<?= empty($_GET['continue']) ? "" : "?continue=" . urlencode(htmlspecialchars($_GET['continue'])) ?>">Register</a></p>
+        <p>No account? <a
+                    href="register.php<?= empty($_GET['continue']) ? "" : "?continue=" . urlencode(htmlspecialchars($_GET['continue'])) ?>">Register</a>
+        </p>
     </div>
 </div>
 </body>
