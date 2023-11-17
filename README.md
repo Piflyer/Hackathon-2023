@@ -9,9 +9,12 @@ View it live [here.](https://winterwonderland.plios.tech/)
 * Lightweight enough for Raspberry Pi
 
 ## Docker Installation (Recommended):
-1) Clone the repo
-`git clone https://github.com/Piflyer/Hackathon-2023.git`
+1) Get the compose file
+
+`wget https://raw.githubusercontent.com/Piflyer/Hackathon-2023/docker/compose.yaml`
+
 2) Start docker compose
+
 ```sh
 docker compose up
 ```
