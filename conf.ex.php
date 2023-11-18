@@ -1,7 +1,7 @@
 <?php
 global $config;
 $config = [
-    "DATABASE_SERVER" => "database",
+    "DATABASE_SERVER" => "localhost",
     "DATABASE_USER" => "root",
     "DATABASE_PASS" => "",
     "DATABASE_NAME" => "metaverse",

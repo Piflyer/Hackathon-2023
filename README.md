@@ -9,15 +9,26 @@ View it live [here.](https://winterwonderland.plios.tech/)
 * Lightweight enough for Raspberry Pi
 
 ## Docker Installation (Recommended):
-1) Get the compose file
+1) Clone the repo
 
-`wget https://raw.githubusercontent.com/Piflyer/Hackathon-2023/docker/compose.yaml`
+`git clone https://github.com/Piflyer/Hackathon-2023.git && cd Hackathon-2023`
 
-2) Start docker compose
-
-```sh
-docker compose up
+2) (Optional) Secure installation by modifying passwords in `compose.yaml`
+```yaml
+...
+    environment:
+      DATABASE_PASS: "" # Must be the same as MARIADB_ROOT_PASSWORD
+      PURGE_PASS: pass
+...
+    environment:
+      MARIADB_ROOT_PASSWORD: ""
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: true
+...
 ```
+
+3) Start docker compose
+
+`docker compose up`
 
 ## Manual Installation:
 
@@ -64,6 +75,7 @@ server {
 `curl https://interwonderland.mydomain.com/internals/purge_rooms.json.php?pass=PURGE_PASS`
 
 ## Configuration Options:
+Options found in `conf.php`, or the environmental variables in `compose.yaml`
 
 | Name            | Description                                                  |
 |-----------------|--------------------------------------------------------------|
@@ -73,3 +85,8 @@ server {
 | DATABASE_NAME   | Name of database you have created tables for                 |
 | NODE_SERVER     | Server running NPM command                                   |
 | PURGE_PASS      | Password used to remove older rooms                          |
+
+## License
+Copyright 2023 Tim Nguyen & Sidney Trzepacz<br>
+Some Rights Reserved<br>
+MIT License
