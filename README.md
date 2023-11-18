@@ -13,17 +13,20 @@ View it live [here.](https://winterwonderland.plios.tech/)
 
 `git clone https://github.com/Piflyer/Hackathon-2023.git && cd Hackathon-2023`
 
-2) (Optional) Secure installation by modifying passwords in `compose.yaml`
+2) Copy configuration file
+
+`cp conf.ex.php conf.php`<br>
+
+Optionally, you can secure the installation by modifying the passwords in `compose.conf` and `conf.php`
 ```yaml
-...
-    environment:
-      DATABASE_PASS: "" # Must be the same as MARIADB_ROOT_PASSWORD
-      PURGE_PASS: pass
-...
     environment:
       MARIADB_ROOT_PASSWORD: ""
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: true
-...
+      # More options can be found at https://hub.docker.com/_/mariadb
+```
+```php
+"DATABASE_PASS" => "", # Must be the same as MARIADB_ROOT_PASSWORD
+"PURGE_PASS" => ""
 ```
 
 3) Start docker compose
@@ -75,7 +78,7 @@ server {
 `curl https://interwonderland.mydomain.com/internals/purge_rooms.json.php?pass=PURGE_PASS`
 
 ## Configuration Options:
-Options found in `conf.php`, or the environmental variables in `compose.yaml`
+Options found in `conf.php`
 
 | Name            | Description                                                  |
 |-----------------|--------------------------------------------------------------|

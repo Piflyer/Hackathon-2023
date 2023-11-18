@@ -19,20 +19,15 @@ services:
       - db:database
     depends_on:
       - db
-    environment:
-      DATABASE_SERVER: database
-      DATABASE_USER: root
-      DATABASE_PASS: ""
-      DATABASE_NAME: metaverse
-      NODE_SERVER: http://localhost:8083
-      PURGE_PASS: pass
+    volumes:
+      - ./conf.php:/var/www/html/conf.php
   web:
     image: nginx:latest
     ports:
       - 8080:8080
     volumes:
       - ./public:/var/www/html/public
-      - ./conf.ex.php:/var/www/html/conf.php
+      - ./conf.php:/var/www/html/conf.php
       - ./default.conf:/etc/nginx/conf.d/default.conf
     links:
       - app

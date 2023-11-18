@@ -16,18 +16,6 @@ RUN mkdir -p /var/www/html/public
 
 COPY ./public /var/www/html/public
 
-#COPY conf.ex.php /var/www/html/conf.php
-RUN echo "<?php \
-          global $config; \
-          $config = [ \
-              'DATABASE_SERVER' => '$DATABASE_SERVER', \
-              'DATABASE_USER' => '$DATABASE_USER', \
-              'DATABASE_PASS' => '$DATABASE_PASS', \
-              'DATABASE_NAME' => '$DATABASE_NAME', \
-              'NODE_SERVER' => '$NODE_SERVER', \
-              'PURGE_PASS' => '$PURGE_PASS' \
-          ];" > /var/www/html/conf.php
-
 WORKDIR /usr/src/app
 
 COPY . /usr/src/app
