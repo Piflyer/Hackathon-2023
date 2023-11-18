@@ -26,7 +26,7 @@ RUN echo "<?php \
               'DATABASE_NAME' => '$DATABASE_NAME', \
               'NODE_SERVER' => '$NODE_SERVER', \
               'PURGE_PASS' => '$PURGE_PASS' \
-          ];" > /var/www/html/public/conf.php
+          ];" > /var/www/html/conf.php
 
 WORKDIR /usr/src/app
 
