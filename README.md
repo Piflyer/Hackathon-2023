@@ -75,7 +75,7 @@ server {
 
 6) (Optional) Automatically discard older rooms by running a webcron:
 
-`curl https://interwonderland.mydomain.com/internals/purge_rooms.json.php?pass=PURGE_PASS`
+`curl https://winterwonderland.mydomain.com/internals/purge_rooms.json.php?pass=PURGE_PASS`
 
 ## Configuration Options:
 Options found in `conf.php`
